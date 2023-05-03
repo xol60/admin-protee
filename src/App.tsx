@@ -1,25 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
+import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
+import Login from './components/Auth/Login'
+import ForgotPassword from './components/Auth/ForgotPassword'
+import SidebarLayout from './components/Pages/Sidebar'
+import HomePage from './components/Pages/HomePage';
+import LocationPage from './components/Pages/LocationPage'
+import UserPage from './components/Pages/UserPage'
+import SearchUserModal from './components/Modal/SearchUserModal'
+import UserDetail from './components/Pages/UsetDetail'
+import NotFoundPage from './components/Errors/Notfound'
+import AppContext from './context/UserContext'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AppContext >
+        <Routes>
+          <Route element={<SidebarLayout />} >
+            <Route path="homepage" element={<HomePage />} />
+            <Route path="locations" element={<LocationPage />} />
+            <Route path="users" element={<UserPage />} />
+            <Route path='user/:id' element={<UserDetail />} />
+          </Route>
+
+          <Route path="/auth" >
+            <Route path="login" element={<Login />} />
+            <Route path="forgotpassword" element={<ForgotPassword />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <SearchUserModal />
+      </AppContext>
+    </BrowserRouter>
   );
 }
 
