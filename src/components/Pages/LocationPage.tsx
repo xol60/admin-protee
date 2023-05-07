@@ -3,10 +3,10 @@ import { Autocomplete, GoogleMap, LoadScript, Marker } from '@react-google-maps/
 import ListItem from '../../components/Location/ListItem';
 import { DangerousLocation, LocationStatusEnum } from '../../module/location.dto';
 import { Button } from 'antd';
-import personal from '../../assests/personal_icon.png'
-import waitting_published from '../../assests/waitting_icon.png'
-import published from '../../assests/published_icon.png'
-import hidden from '../../assests/hidden_icon.png'
+import Personal from '../../assests/personal_icon.png'
+import WaitingPublish from '../../assests/waitting_icon.png'
+import Pubished from '../../assests/published_icon.png'
+import Hidden from '../../assests/hidden_icon.png'
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -38,24 +38,25 @@ function createData(
   id: string,
   name: string,
   description: string,
-  loca: number[],
+  long: number,
+  lat: number,
   sta: string,
 ): DangerousLocation {
   const str: keyof typeof LocationStatusEnum = getKeyByValue(sta);
-  return { id, name, description, long: loca[0], lat: loca[1], status: str as unknown as LocationStatusEnum };
+  return { id, name, description, long, lat, status: str as unknown as LocationStatusEnum };
 }
 
 const rows = [
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [11, 23], 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [12, 22], 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [13, 5], 'personal'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [14, 5], 'personal'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [15, 5], 'hidden'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [16, 2], 'hidden'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [17, 5], 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [18, 5], 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [19, 5], 'waiting_publish'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', [20, 45], 'waiting_publish'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 11, 23, 'published'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 12, 22, 'published'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 13, 5, 'personal'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 14, 5, 'personal'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 15, 5, 'hidden'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 16, 2, 'hidden'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 17, 5, 'published'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 8, 5, 'published'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 19, 5, 'waiting_publish'),
+  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 20, 45, 'waiting_publish'),
 
 ];
 
@@ -86,7 +87,7 @@ function LocationPage() {
       >
         {rows
           .map((row) => {
-            console.log(row.status)
+            console.log(typeof row.status)
             return (
               <Marker position={{ lng: row.long, lat: row.lat }} title={row.name} />
             )
