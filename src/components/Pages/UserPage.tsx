@@ -124,6 +124,7 @@ export default function UserPage() {
   const usersQuery = React.useMemo(() => {
     return query
   }, [query]);
+  console.log(usersQuery)
   const loadUsers = async () => {
     try {
       const res = api.users.list(usersQuery);

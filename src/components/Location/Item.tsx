@@ -1,12 +1,26 @@
 import { EditOutlined } from '@ant-design/icons'
 import { Avatar, Button, Checkbox, Form, Input, List, Modal, Select, Skeleton } from 'antd'
 import React, { useState } from 'react'
+import api from '../../api/axiosClient'
 
 const Item = (i: any) => {
   const [status, setStatus] = useState()
   const [confirmedStatus, setConfirmedStatus] = useState(i.i.status)
+  if(confirmedStatus=='personal'){
+    setConfirmedStatus('Personal')
+  }
+  if(confirmedStatus=='published'){
+    setConfirmedStatus('Published')
+  }
+  if(confirmedStatus=='waiting_publish'){
+    setConfirmedStatus('WaitingPublish')
+  }
+  if(confirmedStatus=='hidden'){
+    setConfirmedStatus('Hidden')
+  }
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  [i.i.status] = useState(i.i.status);
+  
   const handleSubmit = async (values: any) => {
 
     console.log(
@@ -22,7 +36,24 @@ const Item = (i: any) => {
 
     setConfirmedStatus(status)
 
-    i.i.status = status
+ 
+    try {
+      
+      const res = api.location.changedetail({
+          "id": i.i.id,
+          "status":status
+      })
+      Promise.all([res]).then(values => {
+          if (values[0]) {
+
+              console.log('success')
+
+          }
+      });
+  }
+  catch (err) {
+      console.log(err);
+  }
 
     console.log(i.i)
 
@@ -70,10 +101,10 @@ const Item = (i: any) => {
               setStatus(value)
             }} defaultValue={confirmedStatus}
               options={[
-                { value: 'personal', label: 'personal' },
-                { value: 'published', label: 'published' },
-                { value: 'waiting_publish', label: 'waiting_publish' },
-                { value: 'hidden', label: 'hidden', },]}>
+                { value: 'Personal', label: 'Personal' },
+                { value: 'Published', label: 'Published' },
+                { value: 'WaitingPublish', label: 'WaitingPublish' },
+                { value: 'Hidden', label: 'Hidden', },]}>
 
 
             </Select>

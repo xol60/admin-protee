@@ -20,6 +20,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import { Flex } from '@chakra-ui/react';
+import api from '../../api/axiosClient';
 
 const containerStyle = {
   width: '2000px',
@@ -34,40 +35,34 @@ function getKeyByValue(value: string) {
   return key;
 }
 
-function createData(
-  id: string,
-  name: string,
-  description: string,
-  long: number,
-  lat: number,
-  sta: string,
-): DangerousLocation {
-  const str: keyof typeof LocationStatusEnum = getKeyByValue(sta);
-  return { id, name, description, long, lat, status: str as unknown as LocationStatusEnum };
-}
 
-const rows = [
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 11, 23, 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 12, 22, 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 13, 5, 'personal'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 14, 5, 'personal'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 15, 5, 'hidden'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 16, 2, 'hidden'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 17, 5, 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 8, 5, 'published'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 19, 5, 'waiting_publish'),
-  createData('1', 'Quán ăn Cường Vui 2', 'Nhà hàng  220,Đường Trần Hưng Đạo ,Quận Cái Răng', 20, 45, 'waiting_publish'),
 
-];
+
+
 
 function LocationPage() {
+  const [locations, setLocations] = React.useState<DangerousLocation[]>([])
+  React.useEffect(() => {
+    try {
+      const res1 = api.location.list({ filter: '' });
+      
+      Promise.all([res1]).then(values => {
+        console.log(values[0]);
+        setLocations(values[0]);
+      });
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }, [])
   const [selected, setSelected] = useState(null);
   const [center, setCenter] = React.useState({ lat: 10.762622, lng: 106.660172 })
   const onClick = () => {
-    setCenter({ lng: rows[1].long, lat: rows[1].lat })
+    setCenter({ lng: locations[1].long, lat: locations[1].lat })
   }
 
   const isLoading: boolean = true
+  
   return (
 
     <LoadScript
@@ -85,14 +80,14 @@ function LocationPage() {
         center={center}
         zoom={10}
       >
-        {rows
-          .map((row) => {
-            console.log(typeof row.status)
+        {locations
+          .map((location) => {
+            console.log(typeof location.status)
             return (
-              <Marker position={{ lng: row.long, lat: row.lat }} title={row.name} />
+              <Marker position={{ lng: location.long, lat: location.lat }} title={location.name} />
             )
           })}
-        <ListItem places={rows} isLoading={isLoading}></ListItem>
+        <ListItem places={locations} isLoading={isLoading}></ListItem>
 
         <></>
       </GoogleMap>
@@ -112,7 +107,7 @@ const PlacesAutocomplete = (setSelected: any) => {
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  console.log(ready)
+  
 
   const handleSelect = async (address: any) => {
 
@@ -147,8 +142,8 @@ const PlacesAutocomplete = (setSelected: any) => {
           <ComboboxPopover>
             <ComboboxList>
               {status === "OK" &&
-                rows.map(({ id, description }) => (
-                  <ComboboxOption key={id} value={description} />
+                data.map(({ place_id, description }) => (
+                  <ComboboxOption key={place_id} value={description} />
                 ))}
             </ComboboxList>
           </ComboboxPopover>

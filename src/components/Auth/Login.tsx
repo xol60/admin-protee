@@ -26,23 +26,22 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    });
+   
     const pro = api.auth.login({
       email: data.get('email') + '',
       password: data.get('password') + ''
     })
     Promise.all([pro]).then(values => {
       if (values[0].accessToken) {
-        setError(false)
+        
         navigate('/homepage')
         cookies.set('jwt_authentication', values[0].accessToken)
       }
       else {
+        console.log('1231')
         setError(true)
       }
+      
     });
   };
 
