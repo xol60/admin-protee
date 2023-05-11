@@ -11,6 +11,7 @@
     "@mui/material": "^5.11.16",
     "@reach/combobox": "^0.18.0",
     "@react-google-maps/api": "^2.18.1",
+    "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -29,9 +30,12 @@
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hooks-global-state": "^2.1.0",
     "react-icons": "^4.8.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.0",
     "react-scripts": "5.0.1",
+    "redux": "^4.2.1",
     "typescript": "^4.9.5",
     "universal-cookie": "^4.0.4",
     "use-places-autocomplete": "^4.0.0",
@@ -64,6 +68,7 @@
   "devDependencies": {
     "@types/google.maps": "^3.53.0",
     "@types/styled-components": "^5.1.26",
+    "@ubilabs/google-maps-react-hooks": "^2.0.2",
     "styled-components": "^5.3.10"
   }
 }

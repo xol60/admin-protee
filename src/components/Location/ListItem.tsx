@@ -7,7 +7,8 @@ import { List } from "antd";
 
 
 
-const ListItem = (places: any, isLoading: boolean) => {
+const ListItem = (places: any, isLoading: boolean ,center:any,setCenter:any) => {
+  
 
   if (!isLoading)
     return (
@@ -67,7 +68,7 @@ const ListItem = (places: any, isLoading: boolean) => {
 
           dataSource={places.places}
           renderItem={(item) => (
-            <Item i={item} ></Item>
+            <Item i={item} center={center} setCenter={setCenter} ></Item>
 
           )}
         />

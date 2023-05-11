@@ -7,6 +7,7 @@ import Personal from '../../assests/personal_icon.png'
 import WaitingPublish from '../../assests/waitting_icon.png'
 import Pubished from '../../assests/published_icon.png'
 import Hidden from '../../assests/hidden_icon.png'
+import {GoogleMapsProvider} from '@ubilabs/google-maps-react-hooks';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -21,11 +22,9 @@ import {
 import "@reach/combobox/styles.css";
 import { Flex } from '@chakra-ui/react';
 import api from '../../api/axiosClient';
+import { getGlobalState, setGlobalState,useGlobalState } from '../../state';
 
-const containerStyle = {
-  width: '2000px',
-  height: '940px'
-};
+
 
 function getKeyByValue(value: string) {
   const indexOfS = Object.values(LocationStatusEnum).indexOf(value as unknown as LocationStatusEnum);
@@ -37,7 +36,13 @@ function getKeyByValue(value: string) {
 
 
 
-
+const mapOptions={
+  zoom:12,
+  center:{
+    lat:43.68,
+    lng:-79.43
+  },
+}
 
 
 function LocationPage() {
@@ -55,44 +60,43 @@ function LocationPage() {
       console.error(err)
     }
   }, [])
-  const [selected, setSelected] = useState(null);
+  
   const [center, setCenter] = React.useState({ lat: 10.762622, lng: 106.660172 })
   const onClick = () => {
     setCenter({ lng: locations[1].long, lat: locations[1].lat })
   }
 
   const isLoading: boolean = true
-  
+  const [mapContainer,setMapContainer]=useState(null)
+ console.log(useGlobalState("lat")[0],useGlobalState("lng")[0])
+ const [selected, setSelected] = useState(null);
+
   return (
 
-    <LoadScript
+    <GoogleMapsProvider
 
 
-      googleMapsApiKey="AIzaSyBMrRrm1EiDwptZuK3bfhrJyF2x9qIcn0A"
+      googleMapsAPIKey="AIzaSyBMrRrm1EiDwptZuK3bfhrJyF2x9qIcn0A"
+      mapOptions={mapOptions}
+      mapContainer={mapContainer}
       libraries={['places']}
+      
 
-    >
+      
+
+    > 
 
 
 
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-      >
-        {locations
-          .map((location) => {
-            console.log(typeof location.status)
-            return (
-              <Marker position={{ lng: location.long, lat: location.lat }} title={location.name} />
-            )
-          })}
-        <ListItem places={locations} isLoading={isLoading}></ListItem>
+      <div ref={(node:any)=>setMapContainer(node)} style={{height:"100vh"}}></div>
+       
+        <ListItem places={locations} isLoading={isLoading} center={center} setCenter={setCenter}></ListItem>
+        
+       
 
         <></>
-      </GoogleMap>
-      <Button onClick={onClick} >Click me</Button>
-    </LoadScript>
+      </GoogleMapsProvider>
+     
 
 
 
@@ -135,7 +139,7 @@ const PlacesAutocomplete = (setSelected: any) => {
           <ComboboxInput
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            disabled={!ready}
+            
             className="combobox-input"
             placeholder="Search an address"
           />
