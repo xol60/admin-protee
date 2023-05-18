@@ -6,14 +6,15 @@ import { getGlobalState, setGlobalState } from '../../state'
 import {GoogleMapsProvider,useGoogleMap} from '@ubilabs/google-maps-react-hooks';
 import { Marker } from '@react-google-maps/api'
 
-const Item = (i: any,center:any,setCenter:any) => {
-  const map=useGoogleMap()
+const Item = (i: any) => {
+  
+  
+
   
   const[lat,setLat]=useState(Number(i.i.lat))
   
   const[lng,setLng]=useState(Number(i.i.long))
-  console.log(lat)
-  console.log(lng)
+  const map=useGoogleMap()
   const marker=new google.maps.Marker({map})
   marker.setPosition({lng,lat})
   
@@ -83,7 +84,7 @@ const Item = (i: any,center:any,setCenter:any) => {
 
     setConfirmedStatus(status)
     
-    console.log(color)
+   
  
     try {
       
@@ -143,7 +144,7 @@ const Item = (i: any,center:any,setCenter:any) => {
 
 
       </Skeleton>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           name="basic"
           labelCol={{ span: 8 }}

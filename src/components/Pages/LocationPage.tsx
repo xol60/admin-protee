@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Autocomplete, GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { Autocomplete, GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
 import ListItem from '../../components/Location/ListItem';
 import { DangerousLocation, LocationStatusEnum } from '../../module/location.dto';
 import { Button } from 'antd';
@@ -21,8 +21,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import { Flex } from '@chakra-ui/react';
-import api from '../../api/axiosClient';
-import { getGlobalState, setGlobalState,useGlobalState } from '../../state';
+
 
 
 
@@ -46,30 +45,16 @@ const mapOptions={
 
 
 function LocationPage() {
-  const [locations, setLocations] = React.useState<DangerousLocation[]>([])
-  React.useEffect(() => {
-    try {
-      const res1 = api.location.list({ filter: '' });
-      
-      Promise.all([res1]).then(values => {
-        console.log(values[0]);
-        setLocations(values[0]);
-      });
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }, [])
+ 
   
-  const [center, setCenter] = React.useState({ lat: 10.762622, lng: 106.660172 })
-  const onClick = () => {
-    setCenter({ lng: locations[1].long, lat: locations[1].lat })
-  }
+  
+ 
 
   const isLoading: boolean = true
   const [mapContainer,setMapContainer]=useState(null)
- console.log(useGlobalState("lat")[0],useGlobalState("lng")[0])
+ 
  const [selected, setSelected] = useState(null);
+ 
 
   return (
 
@@ -90,7 +75,8 @@ function LocationPage() {
 
       <div ref={(node:any)=>setMapContainer(node)} style={{height:"100vh"}}></div>
        
-        <ListItem places={locations} isLoading={isLoading} center={center} setCenter={setCenter}></ListItem>
+        <ListItem  ></ListItem>
+       
         
        
 
