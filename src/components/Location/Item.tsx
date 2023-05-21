@@ -1,42 +1,42 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Avatar, Button, Checkbox, Form, Input, List, Modal, Select, Skeleton } from 'antd'
-import React, { useState, useCallback, useRef, useEffect  } from 'react'
+import { Avatar, Button, Checkbox, Form, List, Modal, Select, Skeleton } from 'antd'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import api from '../../api/axiosClient'
 import { getGlobalState, setGlobalState } from '../../state'
-import {GoogleMapsProvider,useGoogleMap} from '@ubilabs/google-maps-react-hooks';
+import { GoogleMapsProvider, useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { Marker } from '@react-google-maps/api'
 
 const Item = (i: any) => {
-  
-  
 
-  
-  const[lat,setLat]=useState(Number(i.i.lat))
-  
-  const[lng,setLng]=useState(Number(i.i.long))
-  const map=useGoogleMap()
-  const marker=new google.maps.Marker({map})
-  marker.setPosition({lng,lat})
-  
+
+
+
+  const [lat, setLat] = useState(Number(i.i.lat))
+
+  const [lng, setLng] = useState(Number(i.i.long))
+  const map = useGoogleMap()
+  const marker = new google.maps.Marker({ map })
+  marker.setPosition({ lng, lat })
+
   marker.setTitle(i.i.name)
-  const [color,setColor]=useState("blue");
+  const [color, setColor] = useState("blue");
   const [confirmedStatus, setConfirmedStatus] = useState(i.i.status)
-  if(confirmedStatus=='personal'){
+  if (confirmedStatus == 'personal') {
     setConfirmedStatus('Personal')
     setColor("black")
   }
-  if(confirmedStatus=='published'){
+  if (confirmedStatus == 'published') {
     setConfirmedStatus('Published')
     setColor("red")
   }
-  if(confirmedStatus=='waiting_publish'){
+  if (confirmedStatus == 'waiting_publish') {
     setConfirmedStatus('WaitingPublish')
     setColor("purple")
   }
-  if(confirmedStatus=='hidden'){
+  if (confirmedStatus == 'hidden') {
     setConfirmedStatus('Hidden')
     setColor("blue")
-    
+
   }
 
   const svgMarker = {
@@ -49,14 +49,14 @@ const Item = (i: any) => {
     anchor: new google.maps.Point(0, 20),
   };
   marker.setIcon(svgMarker)
-  
+
   const [status, setStatus] = useState()
-  
- 
-  
+
+
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
- 
+
+
   const showModal = () => {
     setIsModalOpen(true);
 
@@ -64,46 +64,46 @@ const Item = (i: any) => {
 
   const handleOk = () => {
     setIsModalOpen(false);
-    if(status=='Personal'){
-        
+    if (status == 'Personal') {
+
       setColor("black")
     }
-    if(status=='Published'){
-      
+    if (status == 'Published') {
+
       setColor("red")
     }
-    if(status=='WaitingPublish'){
-    
+    if (status == 'WaitingPublish') {
+
       setColor("purple")
     }
-    if(status=='Hidden'){
-      
+    if (status == 'Hidden') {
+
       setColor("blue")
-      
+
     }
 
     setConfirmedStatus(status)
-    
-   
- 
+
+
+
     try {
-      
-      
+
+
       const res = api.location.changedetail({
-          "id": i.i.id,
-          "status":status
+        "id": i.i.id,
+        "status": status
       })
       Promise.all([res]).then(values => {
-          if (values[0]) {
+        if (values[0]) {
 
-              console.log('success')
+          console.log('success')
 
-          }
+        }
       });
-  }
-  catch (err) {
+    }
+    catch (err) {
       console.log(err);
-  }
+    }
 
     console.log(i.i)
 
@@ -116,11 +116,11 @@ const Item = (i: any) => {
 
 
   }
-  const click=()=>{
-    
-    map?.panTo({lat,lng})
-    
-    
+  const click = () => {
+
+    map?.panTo({ lat, lng })
+
+
   }
   return (
     <List.Item
@@ -130,7 +130,7 @@ const Item = (i: any) => {
       <Skeleton avatar title={false} loading={i.i.loading} active>
         <List.Item.Meta
 
-        
+
 
           title={<a onClick={click}>{i.i.name}</a>}
           description={i.i.description}

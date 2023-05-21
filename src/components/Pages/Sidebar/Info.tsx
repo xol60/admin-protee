@@ -1,8 +1,9 @@
 import React from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button, Typography } from 'antd';
+import Typography from '@mui/material/Typography';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom'
 const WrapperStyled = styled.div`
   display: flex;
@@ -17,22 +18,16 @@ const WrapperStyled = styled.div`
 `;
 
 export default function Info() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const onClick = () => {
         const cookies = new Cookies();
         cookies.remove('jwt_authentication')
+        navigate('/auth/login')
     }
     return (
         <WrapperStyled>
-            <div>
-                <Typography.Text className='username'>ADMIN WEBSITE</Typography.Text>
-            </div>
-            <Button
-                ghost
-                type="link"
-                onClick={onClick}
-                href="/auth/login"
-            >
+            <Typography variant="h6" gutterBottom className='username'>ADMIN WEBSITE</Typography>
+            <Button variant="text" onClick={onClick}>
                 <LogoutIcon />
             </Button>
         </WrapperStyled >

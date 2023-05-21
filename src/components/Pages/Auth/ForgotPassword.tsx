@@ -3,46 +3,39 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+
+import { Link } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
-import Cookies from 'universal-cookie'
-import background from '../../assests/background2.jpg'
-import api from '../../api/axiosClient'
-import { Auth } from '../../module/user.dto'
+import CoffeeIcon from '@mui/icons-material/Coffee';
+import background from '../../../assests/background.jpg'
+import { Alert, AlertColor } from '@mui/material';
+import api from '../../../api/axiosClient'
+
+
 const theme = createTheme();
 
-export default function Login() {
-
-  const navigate = useNavigate();
-  const cookies = new Cookies();
-  const [error, setError] = React.useState(false);
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+export default function ForgotPassword() {
+  const [alert, setAlert] = React.useState(false);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-   
-    const pro = api.auth.login({
-      email: data.get('email') + '',
-      password: data.get('password') + ''
-    })
-    Promise.all([pro]).then(values => {
-      if (values[0].accessToken) {
-        
-        navigate('/homepage')
-        cookies.set('jwt_authentication', values[0].accessToken)
-      }
-      else {
-        console.log('1231')
-        setError(true)
-      }
-      
+    console.log({
+      email: data.get('email'),
     });
+    const res = api.auth.requestResetPassword({
+      email: data.get('email') + ''
+    })
+    Promise.all([res]).then(values => {
+      console.log(values[0]);
+      if (values[0]) {
+        setAlert(true);
+      }
+    }
+    )
   };
 
   return (
@@ -73,12 +66,13 @@ export default function Login() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{ m: 1, bgcolor: 'red' }}>
+              <CoffeeIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Forgot Password
             </Typography>
+
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
@@ -90,45 +84,40 @@ export default function Login() {
                 autoComplete="email"
                 autoFocus
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              {error ?
-                (
-                  <>
-                    {
 
-                      <Alert severity="warning">The email address or password is incorrect. Please retry</Alert>
-                    }</>
-                ) : null
-              }
+
+
               <Button
-                fullWidth
-                variant="contained"
                 type="submit"
+                fullWidth
+
+                variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Reset Password
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/forgotpassword" variant="body2">
-                    Forgot password?
+                  <Link to="/auth/login" >
+                    Sign in
                   </Link>
                 </Grid>
 
               </Grid>
 
-
             </Box>
+            {alert ?
+              (
+                <>
+                  {
+
+                    <Alert severity={'success'}>{'Reset password successfully. Please check your email'}</Alert>
+                  }</>
+              ) : null
+            }
+
           </Box>
+
         </Grid>
       </Grid>
     </ThemeProvider>

@@ -3,44 +3,45 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CoffeeIcon from '@mui/icons-material/Coffee';
-import background from '../../assests/background.jpg'
-import { Alert, AlertColor } from '@mui/material';
-
-
-
+import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import Cookies from 'universal-cookie'
+import background from '../../../assests/background2.jpg'
+import api from '../../../api/axiosClient'
 const theme = createTheme();
 
-export default function ForgotPassword() {
-  const [alert, setAlert] = React.useState<AlertColor>('error');
+export default function Login() {
 
-  const [message, setMessage] = React.useState('')
+  const navigate = useNavigate();
+  const cookies = new Cookies();
   const [error, setError] = React.useState(false);
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+
+    const res = api.auth.login({
+      email: data.get('email') + '',
+      password: data.get('password') + ''
+    })
+    Promise.all([res]).then(values => {
+      if (values[0].accessToken) {
+
+        navigate('/homepage')
+        cookies.set('jwt_authentication', values[0].accessToken)
+      }
+      else {
+        console.log('1231')
+        setError(true)
+      }
 
     });
-
-    if (data.get('email') == "protee@gmail.com") {
-      setAlert('success')
-      setMessage('Reset password successfully.Please check your email')
-    }
-    else {
-      setAlert('error')
-      setMessage('The email address is incorrect.Please retry')
-    }
-    setError(true)
   };
 
   return (
@@ -71,13 +72,12 @@ export default function ForgotPassword() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'red' }}>
-              <CoffeeIcon />
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Forgot Password
+              Sign in
             </Typography>
-
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
@@ -89,40 +89,45 @@ export default function ForgotPassword() {
                 autoComplete="email"
                 autoFocus
               />
-
-
-
-              <Button
-                type="submit"
+              <TextField
+                margin="normal"
+                required
                 fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              {error ?
+                (
+                  <>
+                    {
 
+                      <Alert severity="warning">The email address or password is incorrect. Please retry</Alert>
+                    }</>
+                ) : null
+              }
+              <Button
+                fullWidth
                 variant="contained"
+                type="submit"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Reset Password
+                Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/login" variant="body2">
-                    Sign in
+                  <Link to="/auth/forgotpassword" >
+                    Forgot password?
                   </Link>
                 </Grid>
 
               </Grid>
 
+
             </Box>
-            {error ?
-              (
-                <>
-                  {
-
-                    <Alert severity={alert}>{message}</Alert>
-                  }</>
-              ) : null
-            }
-
           </Box>
-
         </Grid>
       </Grid>
     </ThemeProvider>

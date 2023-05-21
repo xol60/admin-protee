@@ -8,10 +8,6 @@ export interface User {
     isActive: boolean;
     createdAt?: Date;
 }
-export interface Auth {
-    email?: string;
-    password?: string;
-}
 export type UserContextType = {
     isSearchModalVisible: boolean,
     setIsSearchModalVisible: (status: boolean) => void

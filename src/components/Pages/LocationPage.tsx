@@ -2,12 +2,9 @@ import React, { useState } from 'react'
 import { Autocomplete, GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
 import ListItem from '../../components/Location/ListItem';
 import { DangerousLocation, LocationStatusEnum } from '../../module/location.dto';
-import { Button } from 'antd';
-import Personal from '../../assests/personal_icon.png'
-import WaitingPublish from '../../assests/waitting_icon.png'
-import Pubished from '../../assests/published_icon.png'
-import Hidden from '../../assests/hidden_icon.png'
-import {GoogleMapsProvider} from '@ubilabs/google-maps-react-hooks';
+import Stack from '@mui/material/Stack';
+
+import { GoogleMapsProvider } from '@ubilabs/google-maps-react-hooks';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -35,54 +32,48 @@ function getKeyByValue(value: string) {
 
 
 
-const mapOptions={
-  zoom:12,
-  center:{
-    lat:43.68,
-    lng:-79.43
+const mapOptions = {
+  zoom: 12,
+  center: {
+    lat: 43.68,
+    lng: -79.43
   },
 }
 
 
 function LocationPage() {
- 
-  
-  
- 
+
+
+
+
 
   const isLoading: boolean = true
-  const [mapContainer,setMapContainer]=useState(null)
- 
- const [selected, setSelected] = useState(null);
- 
+  const [mapContainer, setMapContainer] = useState(null)
+
+  const [selected, setSelected] = useState(null);
+
 
   return (
 
     <GoogleMapsProvider
 
 
-      googleMapsAPIKey="AIzaSyBMrRrm1EiDwptZuK3bfhrJyF2x9qIcn0A"
+      googleMapsAPIKey={process.env.REACT_APP_GOOGLEMAP_KEY + ''}
       mapOptions={mapOptions}
       mapContainer={mapContainer}
       libraries={['places']}
-      
 
-      
 
-    > 
+    >
 
 
 
-      <div ref={(node:any)=>setMapContainer(node)} style={{height:"100vh"}}></div>
-       
-        <ListItem  ></ListItem>
-       
-        
-       
+      <div ref={(node: any) => setMapContainer(node)} style={{ height: "100vh" }}></div>
 
-        <></>
-      </GoogleMapsProvider>
-     
+      <ListItem  ></ListItem>
+      <></>
+    </GoogleMapsProvider>
+
 
 
 
@@ -97,7 +88,7 @@ const PlacesAutocomplete = (setSelected: any) => {
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  
+
 
   const handleSelect = async (address: any) => {
 
@@ -125,7 +116,7 @@ const PlacesAutocomplete = (setSelected: any) => {
           <ComboboxInput
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            
+
             className="combobox-input"
             placeholder="Search an address"
           />

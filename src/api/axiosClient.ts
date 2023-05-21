@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'universal-cookie';
-import { Auth, User } from '../module/user.dto'
+import { User } from '../module/user.dto'
 import { Query } from '../module/query.dto'
 import { CreateLocaitondto } from '../module/location.dto'
-axios.defaults.baseURL = `http://localhost:${process.env.BACKEND_PORT || 3001}/api/v1`;
+import { RequestResetPassword, RequestLogin, ResetPassword } from '../module/auth.dto'
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 axios.interceptors.request.use((config) => {
     const cookies = new Cookies();
     const token = cookies.get('jwt_authentication')
@@ -24,6 +25,8 @@ axios.interceptors.response.use(
 
             case 401:
                 console.error('unauthorised');
+                const cookies = new Cookies();
+                cookies.remove('jwt_authentication')
                 break;
 
             case 404:
@@ -50,7 +53,9 @@ const request = {
 };
 
 const auth = {
-    login: (data: Auth) => request.post<any>(`/auth/system-user/login`, data),
+    login: (data: RequestLogin) => request.post<any>(`/auth/system-user/login`, data),
+    requestResetPassword: (data: RequestResetPassword) => request.post<boolean>(`/auth/system-user/request-reset-password`, data),
+    resetPassword: (data: ResetPassword) => request.post<boolean>(`/auth/system-user/reset-password`, data),
 };
 const users = {
     list: (query: any) => request.get<any>(`/users?page=${query.page}&take=${query.take}&filter=${query.filter}&sortField=${query.sortField}`),
