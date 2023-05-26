@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
 import { Link } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -12,14 +11,10 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import background from '../../../assests/background.jpg'
-import { Alert, AlertColor } from '@mui/material';
 import api from '../../../api/axiosClient'
-
-
+import { toast } from 'react-toastify';
 const theme = createTheme();
-
 export default function ForgotPassword() {
-  const [alert, setAlert] = React.useState(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -32,10 +27,20 @@ export default function ForgotPassword() {
     Promise.all([res]).then(values => {
       console.log(values[0]);
       if (values[0]) {
-        setAlert(true);
+        toast.success("Success! Please check your email!", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "colored"
+        });
       }
     }
-    )
+    ).catch(error => {
+      if (error.response.status === 400) {
+        toast.error("Your email is wrong! Please check again!", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "colored"
+        });
+      }
+    })
   };
 
   return (
@@ -106,15 +111,6 @@ export default function ForgotPassword() {
               </Grid>
 
             </Box>
-            {alert ?
-              (
-                <>
-                  {
-
-                    <Alert severity={'success'}>{'Reset password successfully. Please check your email'}</Alert>
-                  }</>
-              ) : null
-            }
 
           </Box>
 

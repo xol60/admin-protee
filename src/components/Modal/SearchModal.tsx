@@ -42,7 +42,7 @@ export default function SearchUserModal() {
         >
             <Box sx={style} component="form" onSubmit={handleSubmit}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Search name
+                    Search name of user
                 </Typography>
                 <TextField
                     margin="normal"

@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Form, Input, DatePicker, message } from 'antd';
+import { Button, Form, Input, DatePicker } from 'antd';
 import { User } from '../../module/user.dto'
 import dayjs from 'dayjs';
 import { Radio } from 'antd';
 import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import background from '../../assests/background3.jpg'
 import api from '../../api/axiosClient'
+import { toast } from 'react-toastify';
 const HeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
@@ -59,10 +61,8 @@ const DetailStyled = styled.div`
 
 const dateFormat = 'YYYY/MM/DD'
 export default function UserDeatil() {
-    console.log(777);
     const params = useParams();
     const selectedId = params.id + '';
-    const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
     const [user, setUser] = React.useState<User>({
         id: '',
@@ -79,7 +79,6 @@ export default function UserDeatil() {
             const res = api.users.detail(selectedId)
             Promise.all([res]).then(values => {
                 setUser(values[0]);
-                console.log(values[0]);
             });
         }
         catch (err) {
@@ -98,15 +97,18 @@ export default function UserDeatil() {
                 "isActive": isActive
             })
             Promise.all([res]).then(values => {
-                if (values[0]) {
-
-                    messageApi.open({
-                        type: 'success',
-                        content: 'Change info user success',
-                    });
-
+                toast.success("Change info user success!", {
+                    position: toast.POSITION.TOP_CENTER,
+                    theme: "colored"
+                });
+            }).catch(error => {
+                if (error.response.status === 400) {
+                    toast.error("Update fail", {
+                        position: toast.POSITION.TOP_CENTER,
+                        theme: "colored"
+                    })
                 }
-            });
+            })
         }
         catch (err) {
             console.log(err);
@@ -116,12 +118,11 @@ export default function UserDeatil() {
     React.useEffect(() => {
         loadUserDetail()
     }, [])
-    if (user.id == '') {
+    if (user.id === '') {
         return (<></>)
     }
     return (
         <>
-            {contextHolder}
             <WrapperStyled>
 
                 <HeaderStyled>
@@ -136,6 +137,9 @@ export default function UserDeatil() {
                     <DetailStyled>
                         <h1 style={{ textAlign: "center", color: "green" }}>
                             User Info Page</h1>
+                        <Box component="form" >
+
+                        </Box>
                         <Form
                             name="basic"
                             onFinish={onFinish}

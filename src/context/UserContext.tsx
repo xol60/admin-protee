@@ -1,7 +1,6 @@
 
 import * as React from 'react';
-import { UserContextType, User } from '../module/user.dto';
-import { Query } from '../module/query.dto'
+import { UserContextType } from '../module/user.dto';
 import Cookies from 'universal-cookie';
 import { useNavigate, useLocation } from 'react-router-dom'
 export const UserContext = React.createContext<UserContextType>({

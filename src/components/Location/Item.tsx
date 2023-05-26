@@ -1,19 +1,17 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Avatar, Button, Checkbox, Form, List, Modal, Select, Skeleton } from 'antd'
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import { Button, Form, List, Modal, Select, Skeleton } from 'antd'
+import { useState } from 'react'
 import api from '../../api/axiosClient'
-import { getGlobalState, setGlobalState } from '../../state'
-import { GoogleMapsProvider, useGoogleMap } from '@ubilabs/google-maps-react-hooks';
-import { Marker } from '@react-google-maps/api'
+import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
+import { toast } from 'react-toastify';
 
 const Item = (i: any) => {
 
 
+  const [form1] = Form.useForm();
+  const lat = Number(i.i.lat)
+  const lng = Number(i.i.long)
 
-
-  const [lat, setLat] = useState(Number(i.i.lat))
-
-  const [lng, setLng] = useState(Number(i.i.long))
   const map = useGoogleMap()
   const marker = new google.maps.Marker({ map })
   marker.setPosition({ lng, lat })
@@ -21,19 +19,19 @@ const Item = (i: any) => {
   marker.setTitle(i.i.name)
   const [color, setColor] = useState("blue");
   const [confirmedStatus, setConfirmedStatus] = useState(i.i.status)
-  if (confirmedStatus == 'personal') {
+  if (confirmedStatus === 'personal') {
     setConfirmedStatus('Personal')
     setColor("black")
   }
-  if (confirmedStatus == 'published') {
+  if (confirmedStatus === 'published') {
     setConfirmedStatus('Published')
     setColor("red")
   }
-  if (confirmedStatus == 'waiting_publish') {
+  if (confirmedStatus === 'waiting_publish') {
     setConfirmedStatus('WaitingPublish')
     setColor("purple")
   }
-  if (confirmedStatus == 'hidden') {
+  if (confirmedStatus === 'hidden') {
     setConfirmedStatus('Hidden')
     setColor("blue")
 
@@ -50,7 +48,7 @@ const Item = (i: any) => {
   };
   marker.setIcon(svgMarker)
 
-  const [status, setStatus] = useState()
+  const [status, setStatus] = useState(i.i.status)
 
 
 
@@ -64,19 +62,19 @@ const Item = (i: any) => {
 
   const handleOk = () => {
     setIsModalOpen(false);
-    if (status == 'Personal') {
+    if (status === 'Personal') {
 
       setColor("black")
     }
-    if (status == 'Published') {
+    if (status === 'Published') {
 
       setColor("red")
     }
-    if (status == 'WaitingPublish') {
+    if (status === 'WaitingPublish') {
 
       setColor("purple")
     }
-    if (status == 'Hidden') {
+    if (status === 'Hidden') {
 
       setColor("blue")
 
@@ -85,38 +83,41 @@ const Item = (i: any) => {
     setConfirmedStatus(status)
 
 
+    const res = api.location.changedetail({
+      "id": i.i.id,
+      "status": status
+    })
+    Promise.all([res]).then(values => {
+      if (values[0]) {
 
-    try {
+        toast.success("Update successfully", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "colored"
+        })
+      }
+    }).catch(error => {
+      if (error.response.status === 400) {
+        toast.error("Update fail", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "colored"
+        })
+      }
+    })
 
 
-      const res = api.location.changedetail({
-        "id": i.i.id,
-        "status": status
-      })
-      Promise.all([res]).then(values => {
-        if (values[0]) {
 
-          console.log('success')
-
-        }
-      });
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-    console.log(i.i)
 
 
   }
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    form1.resetFields()
 
 
 
   }
-  const click = () => {
+  const Centerclick = () => {
 
     map?.panTo({ lat, lng })
 
@@ -129,10 +130,7 @@ const Item = (i: any) => {
 
       <Skeleton avatar title={false} loading={i.i.loading} active>
         <List.Item.Meta
-
-
-
-          title={<a onClick={click}>{i.i.name}</a>}
+          title={<a onClick={Centerclick}>{i.i.name}</a>}
           description={i.i.description}
 
         />
@@ -151,10 +149,12 @@ const Item = (i: any) => {
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
+          form={form1}
 
           autoComplete="off"
         >
-          <Form.Item>
+          <Form.Item label="Status"
+            name="status">
             <Select id='123' onChange={(value) => {
               setStatus(value)
             }} defaultValue={confirmedStatus}

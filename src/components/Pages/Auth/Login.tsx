@@ -11,17 +11,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
 import Cookies from 'universal-cookie'
 import background from '../../../assests/background2.jpg'
 import api from '../../../api/axiosClient'
+import { toast } from 'react-toastify';
 const theme = createTheme();
 
 export default function Login() {
 
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const [error, setError] = React.useState(false);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,18 +29,23 @@ export default function Login() {
       email: data.get('email') + '',
       password: data.get('password') + ''
     })
+    console.log(res)
     Promise.all([res]).then(values => {
+      console.log(values)
       if (values[0].accessToken) {
 
         navigate('/homepage')
         cookies.set('jwt_authentication', values[0].accessToken)
       }
-      else {
-        console.log('1231')
-        setError(true)
-      }
 
-    });
+    }).catch(error => {
+      if (error.response.status === 400) {
+        toast.error("Invalid pasword or username", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "colored"
+        });
+      }
+    })
   };
 
   return (
@@ -99,15 +103,6 @@ export default function Login() {
                 id="password"
                 autoComplete="current-password"
               />
-              {error ?
-                (
-                  <>
-                    {
-
-                      <Alert severity="warning">The email address or password is incorrect. Please retry</Alert>
-                    }</>
-                ) : null
-              }
               <Button
                 fullWidth
                 variant="contained"

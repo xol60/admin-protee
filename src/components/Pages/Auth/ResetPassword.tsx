@@ -12,30 +12,26 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import background from '../../../assests/background.jpg'
-import { Alert, AlertColor } from '@mui/material';
 import api from '../../../api/axiosClient'
-
+import { toast } from 'react-toastify';
 
 const theme = createTheme();
 
 export default function ResetPassword() {
-    const [alert, setAlert] = React.useState(false);
-    const [security, setSecurity] = React.useState<AlertColor>('error')
-    const [message, setMessage] = React.useState('Passwords must be same')
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (data.get('password') !== data.get('cpassword')) {
-            setAlert(true);
-            setSecurity('error')
-            setMessage('Password does not match')
+            toast.error("Passwords must be same", {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
         else {
             const pass = data.get('password') + ''
             if (pass.length < 8) {
-                setAlert(true);
-                setSecurity('error')
-                setMessage('Password must have at least 8 characters')
+                toast.error('Password must have at least 8 characters', {
+                    position: toast.POSITION.TOP_CENTER
+                });
             }
             else {
                 const res = api.auth.resetPassword({
@@ -45,12 +41,20 @@ export default function ResetPassword() {
                 Promise.all([res]).then(values => {
                     console.log(values[0]);
                     if (values[0]) {
-                        setAlert(true);
-                        setSecurity('success')
-                        setMessage('Your password has been changed successfully')
+                        toast.success('Your password has been changed successfully', {
+                            position: toast.POSITION.TOP_CENTER,
+                            theme: "colored"
+                        });
                     }
                 }
-                )
+                ).catch(error => {
+                    if (error.response.status === 400) {
+                        toast.error("Secret key is wrong!", {
+                            position: toast.POSITION.TOP_CENTER,
+                            theme: "colored"
+                        });
+                    }
+                })
             }
         }
     };
@@ -136,15 +140,6 @@ export default function ResetPassword() {
                             </Grid>
 
                         </Box>
-                        {alert ?
-                            (
-                                <>
-                                    {
-
-                                        <Alert severity={security}>{message}</Alert>
-                                    }</>
-                            ) : null
-                        }
 
                     </Box>
 

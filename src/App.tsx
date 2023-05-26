@@ -1,6 +1,5 @@
-import React from 'react';
-
-import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components/Pages/Auth/Login'
 import ResetPassword from './components/Pages/Auth/ResetPassword'
 import ForgotPassword from './components/Pages/Auth/ForgotPassword'
@@ -12,6 +11,7 @@ import SearchUserModal from './components/Modal/SearchModal'
 import UserDetail from './components/Pages/UsetDetailPage'
 import NotFoundPage from './components/Errors/Notfound'
 import AppContext from './context/UserContext'
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <BrowserRouter>
@@ -32,6 +32,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <SearchUserModal />
+        <ToastContainer />
       </AppContext>
     </BrowserRouter>
   );

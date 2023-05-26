@@ -140,7 +140,6 @@ export default function UserPage() {
   }
   React.useEffect(() => {
     setQuery({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '' })
-    console.log(query);
   }, [queryParameters]);
   React.useEffect(() => {
     loadUsers();
