@@ -5,11 +5,13 @@ import api from '../../api/axiosClient'
 import { getGlobalState, setGlobalState } from '../../state'
 import {GoogleMapsProvider,useGoogleMap} from '@ubilabs/google-maps-react-hooks';
 import { Marker } from '@react-google-maps/api'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Item = (i: any) => {
   
   
-
+  const [form1] = Form.useForm();
   
   const[lat,setLat]=useState(Number(i.i.lat))
   
@@ -50,7 +52,7 @@ const Item = (i: any) => {
   };
   marker.setIcon(svgMarker)
   
-  const [status, setStatus] = useState()
+  const [status, setStatus] = useState(i.i.status)
   
  
   
@@ -96,22 +98,29 @@ const Item = (i: any) => {
       Promise.all([res]).then(values => {
           if (values[0]) {
 
-              console.log('success')
+            toast.success("Update successfully",{
+              position:toast.POSITION.TOP_CENTER,
+              theme:"colored"
+            })
 
           }
       });
   }
   catch (err) {
-      console.log(err);
+    toast.error("Update fail",{
+      position:toast.POSITION.TOP_CENTER,
+      theme:"colored"
+    })
   }
 
-    console.log(i.i)
+    
 
 
   }
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    form1.resetFields()
 
 
 
@@ -151,10 +160,12 @@ const Item = (i: any) => {
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
+          form={form1}
 
           autoComplete="off"
         >
-          <Form.Item>
+          <Form.Item label="Status"
+      name="status">
             <Select id='123' onChange={(value) => {
               setStatus(value)
             }} defaultValue={confirmedStatus}
@@ -176,6 +187,7 @@ const Item = (i: any) => {
 
 
       </Modal>
+      <ToastContainer />
 
 
     </List.Item>

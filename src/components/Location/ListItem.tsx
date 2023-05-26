@@ -3,24 +3,35 @@ import { Box, Flex, SkeletonCircle } from '@chakra-ui/react'
 
 import Item from './Item';
 
-import { Avatar, Button, Checkbox, Form, Input, InputNumber, List, Modal, Select, Skeleton } from 'antd'
+import { Avatar, Button, Checkbox, Form, Input, InputNumber, List, Modal, Select, Skeleton, Tooltip } from 'antd'
 import React, { useState, useCallback, useRef, useEffect  } from 'react'
 import {GoogleMapsProvider, useGoogleMap } from '@ubilabs/google-maps-react-hooks';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
+import { ConsoleSqlOutlined, PlusOutlined } from '@ant-design/icons';
 import api from '../../api/axiosClient';
 import { DangerousLocation } from '../../module/location.dto';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+  geocodeByAddress,
+
+  getLatLng,
+} from 'react-places-autocomplete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { color } from 'framer-motion';
 
 
 
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMrRrm1EiDwptZuK3bfhrJyF2x9qIcn0A&libraries=places"></script>
 const ListItem = () => {
+ 
+  
   const [locations, setLocations] = React.useState<DangerousLocation[]>([])
   React.useEffect(() => {
     try {
       const res1 = api.location.list({ filter: '' });
       
       Promise.all([res1]).then(values => {
-        console.log(values[0]);
+        
         setLocations(values[0]);
       });
     }
@@ -28,6 +39,27 @@ const ListItem = () => {
       console.error(err)
     }
   }, [])
+  const map=useGoogleMap()
+ 
+
+ 
+  
+    map?.addListener("click", (mapsMouseEvent:any) => {
+    
+   
+    setLat(mapsMouseEvent.latLng.toJSON().lat)
+    setLng(mapsMouseEvent.latLng.toJSON().lng)
+    
+    
+    
+  
+    
+    setIsModalOpen(true)
+    form.resetFields()
+    
+  });
+
+
  const [lat,setLat]=useState(0);
  const[lng,setLng]=useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,9 +70,7 @@ const ListItem = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-
-
-
+   
   }
   const onFinish = (values: any) => {
     const pro=api.location.create({
@@ -54,42 +84,109 @@ const ListItem = () => {
     Promise.all([pro]).then(values => {
       if (values[0]) {
         setLocations([...locations,values[0]])
-        form.resetFields()
+       
+        setIsModalOpen(false)
+        toast.success("Add new dangerous location successfully",{
+          position:toast.POSITION.TOP_CENTER,
+          theme:"colored"
+        })
         
       }
       else {
-       
+        toast.error("Add new dangerous location fail.Please check your input address",{
+          position:toast.POSITION.TOP_CENTER,
+          theme:"colored"
+        })
       }
       
     });
-    if(true){
-      setIsModalOpen(false)
-    }
+    
+      
+    
    
 
   };
+  const [form1] = Form.useForm();
   
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    
   };
 
-  
-  
-
-
-  
-  const map=useGoogleMap()
-  const myLatlng = { lat: -25.363, lng: 131.044 };
- 
-  
-    map?.addListener("click", (mapsMouseEvent:any) => {
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const handleCancel1 = () => {
     
+    setIsModalOpen1(false);
+
+  }
+  const onFinishFailed1 = (errorInfo: any) => {
+    
+  };
+  const onFinish1 = (values: any) => {
+    geocodeByAddress(values.address)
+    .then((results:any) => getLatLng(results[0]))
+    .then((latLng:any) => {
+    const pro=api.location.create({
+      name: values.name,
+      description: values.address,
+      long: latLng.lng,
+      lat: latLng.lat
+  
+  
+      })
+      Promise.all([pro]).then(values => {
+        if (values[0]) {
+          setLocations([...locations,values[0]])
+          setIsModalOpen1(false)
+          toast.success("Add new dangerous location successfully",{
+            position:toast.POSITION.TOP_CENTER,
+            theme:"colored"
+          })
+          
+        }
+        else {
+         
+        }
+        
+      });
+     })
+     .catch(error => {
+          setIsModalOpen1(false)
+          toast.error("Add new dangerous location fail.Please check your input address",{
+            position:toast.POSITION.TOP_CENTER,
+            theme:"colored"
+          })
+        });
+    
+    
+
    
-    setLat(mapsMouseEvent.latLng.toJSON().lat)
-    setLng(mapsMouseEvent.latLng.toJSON().lng)
-    setIsModalOpen(true)
+   
+   
+
+  };
+  const [address,setAddress]=useState("");
+ const handleChange = (address:any) => {
+    setAddress(address)
+  };
+ 
+  const handleSelect = (address:any) => {
+   
+    form1.setFieldsValue({address:address})
     
-  });
+    
+  
+  };
+  const showModal1=()=>{
+    setIsModalOpen1(true)
+    form1.resetFields()
+  }
+  
+  
+  
+
+
+  
+  
 
   if (!true)
     return (
@@ -129,6 +226,7 @@ const ListItem = () => {
     );
 
   return (
+    
     <Flex
       direction={"column"}
       bg={"whiteAlpha.900"}
@@ -143,6 +241,10 @@ const ListItem = () => {
     >
       
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
+      
+      <Tooltip title="Add location">
+        <Button onClick={showModal1} type="primary" shape="circle" icon={<PlusOutlined />} />
+      </Tooltip>
       
       <Modal title="Add Location" open={isModalOpen}  onCancel={handleCancel} footer={[
           
@@ -161,19 +263,112 @@ const ListItem = () => {
 
           autoComplete="off"
         >
-          <Form.Item
-      label="Address"
-      name="address"
-      rules={[{ required: true, message: 'Please input the address of location!' }]}
-    >
-      <Input placeholder='227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh' />
-    </Form.Item>
+          
     <Form.Item
       label="Name"
       name="name"
       rules={[{ required: true, message: 'Please input the name of location!' }]}
     >
+      <Input  placeholder='Trường Đại học Khoa học Tự nhiên ' />
+    </Form.Item>
+    <Form.Item
+      label="Address"
+      name="address"
+      rules={[{ required: true, message: 'Please input the address of location!' }]}
+    >
+      <Input  placeholder='227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh' />
+    </Form.Item>
+        
+    
+     
+            
+      
+      <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
+        
+
+      <Button type="primary" htmlType="submit">
+        Submit
+      </Button>
+    </Form.Item>
+        </Form>
+
+
+
+
+
+
+      </Modal>
+           
+            
+      <Modal title="Add Location" open={isModalOpen1}  onCancel={handleCancel1} footer={[
+          
+          
+        ]}>
+        <Form
+        form={form1}
+        
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          style={{ maxWidth: 600 }}
+          initialValues={{ remember: true }}
+          onFinish={onFinish1}
+    onFinishFailed={onFinishFailed1}
+
+          autoComplete="off"
+        >
+          
+          <Form.Item
+      label="Name"
+      name="name"
+      rules={[{ required: true, message: 'Please input the name of location!' }]}
+    >
       <Input placeholder='Trường Đại học Khoa học Tự nhiên ' />
+    </Form.Item>     
+    <Form.Item
+      label="Address"
+     name="address"
+      rules={[{ required: true, message: 'Please input the address of location!' }]}
+    >
+      <PlacesAutocomplete
+        value={address}
+        onChange={handleChange}
+        onSelect={handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }:any) => (
+          <div>
+            <Input width='100%'
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map((suggestion:any) => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#689ee4', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+      
     </Form.Item>
         
          
@@ -195,9 +390,6 @@ const ListItem = () => {
 
 
       </Modal>
-           
-            
-
         <List
           className="demo-loadmore-list"
 
@@ -213,7 +405,7 @@ const ListItem = () => {
 
 
 
-
+         <ToastContainer />
       </Flex>
     </Flex>
   )
