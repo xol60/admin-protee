@@ -8,6 +8,7 @@ axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 
 axios.interceptors.request.use((config) => {
     config.headers['Content-Type'] = 'application/json'
+    config.headers['Access-Control-Allow-Origin'] = '*'
     const cookies = new Cookies();
     const token = cookies.get('jwt_authentication')
     if (token) {
@@ -74,7 +75,7 @@ const users = {
 };
 const location = {
     list: (query: any) => request.get<any>(`/location?filter=${query.filter}`),
-    changedetail: (value: any) => request.put<any>('/location', value),
+    changedetail: (value: any) => request.put<any>('/location/system-user', value),
     create: (data: CreateLocaitondto) => request.post<any>(`/location`, data),
 };
 const api = {

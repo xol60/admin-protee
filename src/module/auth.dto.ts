@@ -9,3 +9,6 @@ export interface ResetPassword {
     secretKey: string;
     newPassword: string;
 }
+export interface AccessToken {
+    accessToken: string
+}

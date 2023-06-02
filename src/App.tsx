@@ -10,7 +10,7 @@ import UserPage from './components/Pages/UserPage'
 import SearchUserModal from './components/Modal/SearchModal'
 import UserDetail from './components/Pages/UsetDetailPage'
 import NotFoundPage from './components/Errors/Notfound'
-import AppContext from './context/UserContext'
+import AppContext from './context/AuthContext'
 import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
@@ -31,7 +31,6 @@ function App() {
           <Route path="locations" element={<LocationPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-        <SearchUserModal />
         <ToastContainer />
       </AppContext>
     </BrowserRouter>

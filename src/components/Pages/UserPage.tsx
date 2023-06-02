@@ -19,7 +19,7 @@ import { useSearchParams } from "react-router-dom"
 import { User } from '../../module/user.dto'
 import { Query } from '../../module/query.dto'
 import background from '../../assests/background3.jpg'
-import { UserContext } from '../../context/UserContext'
+import SearchUserModal from '../Modal/SearchModal'
 import api from '../../api/axiosClient'
 const HeaderStyled = styled.div`
   display: flex;
@@ -114,11 +114,11 @@ export default function UserPage() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const navigate = useNavigate()
-  const { setIsSearchModalVisible } = React.useContext(UserContext);
   const [queryParameters] = useSearchParams()
   const [query, setQuery] = React.useState<Query>({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("sortField") + '', sortField: queryParameters.get("sortField") + '' })
   const [total, setTotal] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([])
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const usersQuery = React.useMemo(() => {
@@ -160,9 +160,7 @@ export default function UserPage() {
     navigate(`/users?page=1&take=${event.target.value}&filter=${query.filter + ''}&sortField=${query.sortField}`)
 
   };
-  const onSearchClick = () => {
-    setIsSearchModalVisible(true);
-  }
+
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     navigate(`/user/${id}`)
   }
@@ -186,7 +184,7 @@ export default function UserPage() {
         </div>
         <ButtonGroupStyled>
           <FaIcons.FaSearch />
-          <Button variant="contained" onClick={onSearchClick}>
+          <Button variant="contained" onClick={() => { console.log(888); setIsModalOpen(true) }}>
             Search
           </Button>
         </ButtonGroupStyled>
@@ -281,7 +279,7 @@ export default function UserPage() {
 
       </ContentStyled>
 
-
+      <SearchUserModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </WrapperStyled>
   );
 }

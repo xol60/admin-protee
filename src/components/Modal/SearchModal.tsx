@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import { UserContext } from '../../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 const style = {
     position: 'absolute',
@@ -18,24 +17,23 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-export default function SearchUserModal() {
-    const { isSearchModalVisible, setIsSearchModalVisible } = React.useContext(UserContext);
+export default function SearchUserModal(props: any) {
     const navigate = useNavigate()
+    const { isOpen, setIsOpen } = props
 
     const handleCancel = () => {
-
-        setIsSearchModalVisible(false);
+        setIsOpen(false);
     };
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const value = data.get('value') + ''
-        setIsSearchModalVisible(false);
+        setIsOpen(false);
         navigate('/users?page=1&take=10&filter=' + value + '&sortField=')
     };
     return (
         <Modal
-            open={isSearchModalVisible}
+            open={isOpen}
             onClose={handleCancel}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"

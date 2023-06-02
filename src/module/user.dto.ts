@@ -7,8 +7,5 @@ export interface User {
     dob?: Date;
     isActive: boolean;
     createdAt?: Date;
+    avt?: string;
 }
-export type UserContextType = {
-    isSearchModalVisible: boolean,
-    setIsSearchModalVisible: (status: boolean) => void
-};
