@@ -24,3 +24,10 @@ export interface CreateLocaitondto {
     long: number;
     lat: number;
 }
+
+
+export interface QueryLocationDto {
+    filter?: string;
+    sortField?: string;
+    status?: string;
+}

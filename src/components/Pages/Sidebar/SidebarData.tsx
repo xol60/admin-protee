@@ -15,7 +15,7 @@ export const SidebarData = [
     },
     {
         title: 'Locations',
-        path: '/locations',
+        path: '/locations?filter=&sortField=&status=',
         icon: <LocationOnIcon />
     },
 ]

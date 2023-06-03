@@ -19,7 +19,7 @@ import { useSearchParams } from "react-router-dom"
 import { User } from '../../module/user.dto'
 import { Query } from '../../module/query.dto'
 import background from '../../assests/background3.jpg'
-import SearchUserModal from '../Modal/SearchModal'
+import SearchModal from '../Modal/SearchModal'
 import api from '../../api/axiosClient'
 const HeaderStyled = styled.div`
   display: flex;
@@ -115,7 +115,7 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const navigate = useNavigate()
   const [queryParameters] = useSearchParams()
-  const [query, setQuery] = React.useState<Query>({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("sortField") + '', sortField: queryParameters.get("sortField") + '' })
+  const [query, setQuery] = React.useState<Query>({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '' })
   const [total, setTotal] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([])
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
@@ -279,7 +279,7 @@ export default function UserPage() {
 
       </ContentStyled>
 
-      <SearchUserModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <SearchModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} isLocation={false} />
     </WrapperStyled>
   );
 }

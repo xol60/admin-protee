@@ -27,7 +27,7 @@ export default function Info() {
     return (
         <WrapperStyled>
             <Typography variant="h6" gutterBottom className='username'>ADMIN WEBSITE</Typography>
-            <Button variant="text" onClick={onClick}>
+            <Button title="Logout" variant="text" onClick={onClick}>
                 <LogoutIcon />
             </Button>
         </WrapperStyled >

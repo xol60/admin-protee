@@ -17,9 +17,9 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-export default function SearchUserModal(props: any) {
+export default function SearchModal(props: any) {
     const navigate = useNavigate()
-    const { isOpen, setIsOpen } = props
+    const { isOpen, setIsOpen, isLocation } = props
 
     const handleCancel = () => {
         setIsOpen(false);
@@ -31,6 +31,13 @@ export default function SearchUserModal(props: any) {
         setIsOpen(false);
         navigate('/users?page=1&take=10&filter=' + value + '&sortField=')
     };
+    const handleLocationSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const value = data.get('value') + ''
+        setIsOpen(false);
+        navigate('/locations?&filter=' + value + '&sortField=&status=')
+    };
     return (
         <Modal
             open={isOpen}
@@ -38,9 +45,9 @@ export default function SearchUserModal(props: any) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box sx={style} component="form" onSubmit={handleSubmit}>
+            <Box sx={style} component="form" onSubmit={isLocation ? handleLocationSubmit : handleSubmit}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Search name of user
+                    Search name
                 </Typography>
                 <TextField
                     margin="normal"

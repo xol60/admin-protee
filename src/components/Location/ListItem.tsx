@@ -2,11 +2,13 @@ import { Box, Flex, SkeletonCircle } from '@chakra-ui/react'
 
 
 import Item from './Item';
-
-import { Button, Form, Input, List, Modal, Tooltip } from 'antd'
+import { useSearchParams } from "react-router-dom"
+import { Button, Form, Input, List, Modal, Tooltip, Dropdown, Space } from 'antd'
+import type { MenuProps } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import React, { useState, } from 'react'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
-import { HomeOutlined, PlusOutlined } from '@ant-design/icons';
+import { HomeOutlined, PlusOutlined, SearchOutlined, UndoOutlined } from '@ant-design/icons';
 import api from '../../api/axiosClient';
 import { DangerousLocation } from '../../module/location.dto';
 import PlacesAutocomplete from 'react-places-autocomplete';
@@ -16,18 +18,53 @@ import {
 } from 'react-places-autocomplete';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { QueryLocationDto } from '../../module/location.dto'
+import SearchModal from '../Modal/SearchModal'
 
+const sortValues: MenuProps['items'] = [
+  {
+    label: 'Name',
+    key: 'name',
+  },
+  {
+    label: 'Status',
+    key: 'status',
+  },
+  {
+    label: 'Description',
+    key: 'description',
+  },
+];
 
+const statusValues: MenuProps['items'] = [
+  {
+    label: 'Personal',
+    key: 'personal',
+  },
+  {
+    label: 'Waitting Publish',
+    key: 'waiting_publish',
+  },
+  {
+    label: 'Published',
+    key: 'published',
+  },
+  {
+    label: 'Hidden',
+    key: 'hidden',
+  },
+];
 
 <script src={"https://maps.googleapis.com/maps/api/js?key=" + process.env.REACT_APP_GOOGLEMAP_KEY + "&libraries=places"}></script>
 const ListItem = () => {
-
-
   const [locations, setLocations] = React.useState<DangerousLocation[]>([])
   const navigate = useNavigate()
+  const [queryParameters] = useSearchParams()
+  const [query, setQuery] = React.useState<QueryLocationDto>({ filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '', status: queryParameters.get("status") + '' })
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   React.useEffect(() => {
     try {
-      const res1 = api.location.list({ filter: '' });
+      const res1 = api.location.list(query);
 
       Promise.all([res1]).then(values => {
 
@@ -37,36 +74,25 @@ const ListItem = () => {
     catch (err) {
       console.error(err)
     }
-  }, [])
+  }, [query])
+  React.useEffect(() => {
+    setQuery({ filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '', status: queryParameters.get("status") + '' })
+  }, [queryParameters]);
   const map = useGoogleMap()
 
 
 
 
   map?.addListener("click", (mapsMouseEvent: any) => {
-
-
     setLat(mapsMouseEvent.latLng.toJSON().lat)
     setLng(mapsMouseEvent.latLng.toJSON().lng)
-
-
-
-
-
     setIsModalOpen(true)
     form.resetFields()
-
   });
-
-
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
-
-
-
-
   const handleCancel = () => {
     setIsModalOpen(false);
 
@@ -77,8 +103,6 @@ const ListItem = () => {
       description: values.address,
       long: lng,
       lat: lat
-
-
     })
     Promise.all([pro]).then(values => {
       setLocations([...locations, values[0]])
@@ -107,7 +131,12 @@ const ListItem = () => {
   const onFinishFailed = (errorInfo: any) => {
 
   };
-
+  const onSortClick: MenuProps['onClick'] = ({ key }) => {
+    navigate(`/locations?&filter=${query.filter + ''}&sortField=${key}&status=${query.status}`)
+  };
+  const onStatusClick: MenuProps['onClick'] = ({ key }) => {
+    navigate(`/locations?&filter=${query.filter + ''}&sortField=${query.sortField}&status=${key}`)
+  };
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const handleCancel1 = () => {
 
@@ -217,8 +246,20 @@ const ListItem = () => {
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
 
         <Tooltip  >
-          <Button style={{ margin: '20px' }} onClick={() => { navigate('/homepage') }} type="primary" size="large" icon={<HomeOutlined />}>Home</Button>
-          <Button onClick={showModal1} type="primary" size="large" icon={<PlusOutlined />}></Button>
+          <Button style={{ margin: '10px' }} title='Come back Home Page' onClick={() => { navigate('/homepage') }} type="primary" shape="circle" size="large" icon={<HomeOutlined />}></Button>
+          <Dropdown menu={{ items: sortValues, onClick: onSortClick }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Button style={{ margin: '10px' }} type="primary" size="large" icon={<DownOutlined />}>Sort By</Button>
+            </a>
+          </Dropdown>
+          <Dropdown menu={{ items: statusValues, onClick: onStatusClick }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Button style={{ margin: '10px' }} type="primary" size="large" icon={<DownOutlined />}>Status</Button>
+            </a>
+          </Dropdown>
+          <Button style={{ margin: '10px' }} title='Add a new location' onClick={showModal1} type="primary" size="large" shape="circle" icon={<PlusOutlined />}></Button>
+          <Button style={{ margin: '10px' }} title='Search name of location' onClick={() => { setIsOpen(true) }} type="primary" shape="circle" size="large" icon={<SearchOutlined />}></Button>
+          <Button style={{ margin: '10px' }} title='Refresh condition' onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} shape="circle" type="primary" size="large" icon={<UndoOutlined />}></Button>
         </Tooltip>
 
         <Modal title="Add Location" open={isModalOpen} onCancel={handleCancel} footer={[
@@ -259,18 +300,11 @@ const ListItem = () => {
 
 
             <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-
-
               <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>
           </Form>
-
-
-
-
-
 
         </Modal>
 
@@ -351,19 +385,11 @@ const ListItem = () => {
 
 
             <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-
-
               <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>
           </Form>
-
-
-
-
-
-
         </Modal>
         <List
           className="demo-loadmore-list"
@@ -376,11 +402,8 @@ const ListItem = () => {
 
           )}
         />
-
-
-
-
       </Flex>
+      <SearchModal isOpen={isOpen} setIsOpen={setIsOpen} isLocation={true} />
     </Flex>
   )
 }
