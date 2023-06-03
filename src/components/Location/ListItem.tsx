@@ -398,7 +398,7 @@ const ListItem = () => {
 
           dataSource={locations}
           renderItem={(item) => (
-            <Item i={item}  ></Item>
+            <Item i={item} status={item.status} ></Item>
 
           )}
         />

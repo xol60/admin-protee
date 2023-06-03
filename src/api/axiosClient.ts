@@ -74,7 +74,7 @@ const users = {
     changedetail: (value: any) => request.put<any>('/users', value)
 };
 const location = {
-    list: (query: any) => request.get<any>(`/location?filter=${query.filter}&sortField=${query.sortField}&status=${query.status}`),
+    list: (query: any) => request.get<any>(`/location/system-user?filter=${query.filter}&sortField=${query.sortField}&status=${query.status}`),
     changedetail: (value: any) => request.put<any>('/location/system-user', value),
     create: (data: CreateLocaitondto) => request.post<any>(`/location`, data),
 };
