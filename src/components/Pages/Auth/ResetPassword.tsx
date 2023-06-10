@@ -14,10 +14,12 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import background from '../../../assests/background.jpg'
 import api from '../../../api/axiosClient'
 import { toast } from 'react-toastify';
-
+import { useParams } from 'react-router-dom';
 const theme = createTheme();
 
 export default function ResetPassword() {
+    const params = useParams();
+    const secretKey = params.secretKey + '';
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -34,8 +36,12 @@ export default function ResetPassword() {
                 });
             }
             else {
+                console.log({
+                    secretKey: secretKey,
+                    newPassword: pass
+                })
                 const res = api.auth.resetPassword({
-                    secretKey: data.get('secretKey') + '',
+                    secretKey: secretKey,
                     newPassword: pass
                 })
                 Promise.all([res]).then(values => {
@@ -49,7 +55,7 @@ export default function ResetPassword() {
                 }
                 ).catch(error => {
                     if (error.response.status === 400) {
-                        toast.error("Secret key is wrong!", {
+                        toast.error("Request is invalid or out of date", {
                             position: toast.POSITION.TOP_CENTER,
                             theme: "colored"
                         });
@@ -95,14 +101,7 @@ export default function ResetPassword() {
                         </Typography>
 
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="secretKey"
-                                label="Secret Key"
-                                name="secretKey"
-                            />
+
                             <TextField
                                 margin="normal"
                                 required
