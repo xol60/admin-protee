@@ -33,6 +33,12 @@ axios.interceptors.response.use(
                 });
                 break;
 
+            case 403:
+                toast.error('Forbidden! You do not have permission to access!', {
+                    position: toast.POSITION.TOP_CENTER,
+                    theme: "colored"
+                });
+                break;
             case 404:
                 console.error('/not-found');
                 toast.error('Oops! Something went error. Please contact your administrator!', {
@@ -44,6 +50,12 @@ axios.interceptors.response.use(
             case 500:
                 console.error('/server-error');
                 toast.error('Server is having trouble! Please try again later!', {
+                    position: toast.POSITION.TOP_CENTER,
+                    theme: "colored"
+                });
+                break;
+            default:
+                toast.error('Unknown error. Please check and try again!', {
                     position: toast.POSITION.TOP_CENTER,
                     theme: "colored"
                 });
