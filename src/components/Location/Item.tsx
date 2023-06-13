@@ -122,16 +122,24 @@ const Item = (i: any) => {
     <List.Item
       actions={[<Button onClick={showModal}><EditOutlined /></Button>]}
     >
-      <Skeleton avatar title={false} loading={i.i.loading} active>
+      
         <List.Item.Meta
+         
           avatar={<Avatar src={i.i.icon} />}
           title={<a onClick={Centerclick}>{i.i.name}</a>}
           description={i.i.description}
         />
+        <List.Item.Meta></List.Item.Meta>
+      
+       
         <List.Item.Meta
+          
+        
+
           description={<p >{confirmedStatus}</p>}
           title="Status"
           ></List.Item.Meta>
+         
           
         <List.Item.Meta
           avatar={<Avatar onClick={Userclick} src={user?.avt||"https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
@@ -139,8 +147,10 @@ const Item = (i: any) => {
           description={<a onClick={Userclick}>{user?.name||"Admin"}</a>}
          
         />
+      
+       
         
-      </Skeleton>
+      
       <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           name="basic"
