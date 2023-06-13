@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Avatar, Button, Form, List, Modal, Select, Skeleton } from 'antd'
+import { Avatar, Button, Form, List, Modal, Select,  } from 'antd'
 import React from 'react'
 import api from '../../api/axiosClient'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { User } from '../../module/user.dto';
 
 import { useNavigate } from 'react-router-dom';
+import {  Chip } from '@mui/material';
 
 const Item = (i: any) => {
   const [user,setUser]=React.useState<User>();
@@ -129,16 +130,9 @@ const Item = (i: any) => {
           title={<a onClick={Centerclick}>{i.i.name}</a>}
           description={i.i.description}
         />
-        <List.Item.Meta></List.Item.Meta>
       
        
-        <List.Item.Meta
-          
         
-
-          description={<p >{confirmedStatus}</p>}
-          title="Status"
-          ></List.Item.Meta>
          
           
         <List.Item.Meta
@@ -147,6 +141,8 @@ const Item = (i: any) => {
           description={<a onClick={Userclick}>{user?.name||"Admin"}</a>}
          
         />
+        <Chip label={confirmedStatus} onClick={showModal}  />
+        
       
        
         
