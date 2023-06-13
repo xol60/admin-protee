@@ -78,7 +78,8 @@ const ListItem = () => {
   React.useEffect(() => {
     setQuery({ filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '', status: queryParameters.get("status") + '' })
   }, [queryParameters]);
-  const map = useGoogleMap()
+  const  map  = useGoogleMap()
+  
 
 
 
@@ -98,6 +99,7 @@ const ListItem = () => {
 
   }
   const onFinish = (values: any) => {
+    setIsModalOpen(false)
     const pro = api.location.create({
       name: values.name,
       description: values.address,
@@ -105,9 +107,10 @@ const ListItem = () => {
       lat: lat
     })
     Promise.all([pro]).then(values => {
+     
       setLocations([...locations, values[0]])
 
-      setIsModalOpen(false)
+     
       toast.success("Add new dangerous location successfully", {
         position: toast.POSITION.TOP_CENTER,
         theme: "colored"
@@ -133,9 +136,12 @@ const ListItem = () => {
   };
   const onSortClick: MenuProps['onClick'] = ({ key }) => {
     navigate(`/locations?&filter=${query.filter + ''}&sortField=${key}&status=${query.status}`)
+    
   };
   const onStatusClick: MenuProps['onClick'] = ({ key }) => {
+   
     navigate(`/locations?&filter=${query.filter + ''}&sortField=${query.sortField}&status=${key}`)
+    
   };
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const handleCancel1 = () => {
@@ -147,6 +153,7 @@ const ListItem = () => {
 
   };
   const onFinish1 = (values: any) => {
+    setIsModalOpen1(false)
     geocodeByAddress(values.address)
       .then((results: any) => getLatLng(results[0]))
       .then((latLng: any) => {
@@ -159,7 +166,7 @@ const ListItem = () => {
         Promise.all([pro]).then(values => {
           if (values[0]) {
             setLocations([...locations, values[0]])
-            setIsModalOpen1(false)
+            
             toast.success("Add new dangerous location successfully", {
               position: toast.POSITION.TOP_CENTER,
               theme: "colored"

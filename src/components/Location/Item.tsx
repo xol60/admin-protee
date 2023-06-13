@@ -1,12 +1,27 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Form, List, Modal, Select, Skeleton } from 'antd'
+import { Avatar, Button, Form, List, Modal, Select, Skeleton } from 'antd'
 import React from 'react'
 import api from '../../api/axiosClient'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { toast } from 'react-toastify';
+import { User } from '../../module/user.dto';
+
+import { useNavigate } from 'react-router-dom';
 
 const Item = (i: any) => {
-  console.log(1, i.i.status);
+  const [user,setUser]=React.useState<User>();
+ 
+  try {
+    const res = api.users.detail(i.i.createdBy)
+    Promise.all([res]).then(values => {
+        setUser(values[0]);
+        
+    });
+    }
+    catch (err) {
+      console.log(err);
+    }
+ 
   const [form1] = Form.useForm();
   const lat = Number(i.i.lat)
   const lng = Number(i.i.long)
@@ -96,17 +111,35 @@ const Item = (i: any) => {
   const Centerclick = () => {
     map?.panTo({ lat, lng })
   }
+  const navigate=useNavigate()
+  const Userclick=()=>{
+    if(user){
+      navigate(`/user/${user.id}`)
+    }
+  }
+  
   return (
     <List.Item
       actions={[<Button onClick={showModal}><EditOutlined /></Button>]}
     >
       <Skeleton avatar title={false} loading={i.i.loading} active>
         <List.Item.Meta
+          avatar={<Avatar src={i.i.icon} />}
           title={<a onClick={Centerclick}>{i.i.name}</a>}
           description={i.i.description}
         />
         <List.Item.Meta
-          title={confirmedStatus}></List.Item.Meta>
+          description={<p >{confirmedStatus}</p>}
+          title="Status"
+          ></List.Item.Meta>
+          
+        <List.Item.Meta
+          avatar={<Avatar onClick={Userclick} src={user?.avt||"https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
+          title="Creator"
+          description={<a onClick={Userclick}>{user?.name||"Admin"}</a>}
+         
+        />
+        
       </Skeleton>
       <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
