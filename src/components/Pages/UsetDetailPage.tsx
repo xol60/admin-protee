@@ -5,7 +5,6 @@ import { User } from '../../module/user.dto'
 import dayjs from 'dayjs';
 import { Radio } from 'antd';
 import { useParams } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import background from '../../assests/background3.jpg'
 import api from '../../api/axiosClient'
@@ -17,7 +16,7 @@ const HeaderStyled = styled.div`
   padding: 0 16px;
   align-items: center;
   border-bottom: 1px solid rgb(230, 230, 230);
-  color:white;
+  color:black;
   font-size:20px;
   .header {
     &__info {
@@ -38,7 +37,7 @@ const HeaderStyled = styled.div`
 
 const WrapperStyled = styled.div`
   height: 100vh;
-  background-image:url(${background});
+  background-color:white;
   margin-left:305.83px;
 `;
 
@@ -57,6 +56,11 @@ const DetailStyled = styled.div`
   margin-left:30px;
   font-size:20px;
   overflow-y: auto;
+  border-width:2px;
+border-style:solid;
+borderColor: 'text.primary',
+            m: 1,
+            border: 1,
 `;
 
 const dateFormat = 'YYYY/MM/DD'
@@ -137,9 +141,7 @@ export default function UserDeatil() {
                     <DetailStyled>
                         <h1 style={{ textAlign: "center", color: "green" }}>
                             User Info Page</h1>
-                        <Box component="form" >
 
-                        </Box>
                         <Form
                             name="basic"
                             onFinish={onFinish}

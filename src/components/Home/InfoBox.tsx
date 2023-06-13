@@ -15,8 +15,8 @@ const commonStyles = {
 };
 
 const ImageStyled = styled.div`
-  .image{
-  margin-left:100px;
+.imageInfo{
+     margin-left:100px;
   margin-top:50px;
   }
   .info{
@@ -55,7 +55,7 @@ const InfoBox = (props: any) => {
             >
                 <ImageStyled>
                     <Box
-                        className="image"
+                        className="imageInfo"
                         component="img"
                         sx={{
                             height: 100,
