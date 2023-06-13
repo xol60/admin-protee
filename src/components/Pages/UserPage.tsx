@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom"
 import { User } from '../../module/user.dto'
 import { Query } from '../../module/query.dto'
-import background from '../../assests/background3.jpg'
+import Avatar from '@mui/material/Avatar';
 import SearchModal from '../Modal/SearchModal'
 import api from '../../api/axiosClient'
 const HeaderStyled = styled.div`
@@ -28,7 +28,7 @@ const HeaderStyled = styled.div`
   padding: 0 16px;
   align-items: center;
   border-bottom: 1px solid rgb(230, 230, 230);
-  color:white;
+  color:black;
   font-size:14px;
   .header {
     &__info {
@@ -53,7 +53,7 @@ const ButtonGroupStyled = styled.div`
 `;
 const WrapperStyled = styled.div`
   height: 100vh;
-  background-image:url(${background});
+  background-color:white;
   margin-left:305.83px;
 `;
 
@@ -72,13 +72,15 @@ const UserListStyled = styled.div`
   font-size:14px;
   overflow-y: auto;
 `;
+
 interface Column {
-  id: 'name' | 'email' | 'phone' | 'dob' | 'status';
+  id: 'avt' | 'name' | 'email' | 'phone' | 'dob' | 'status';
   label: string;
   minWidth: number;
 }
 
 const columns: readonly Column[] = [
+  { id: 'avt', label: 'Avatar', minWidth: 100 },
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'email', label: 'Email', minWidth: 170 },
   {
@@ -87,12 +89,12 @@ const columns: readonly Column[] = [
   {
     id: 'dob',
     label: 'Date Of Birth',
-    minWidth: 170,
+    minWidth: 100,
   },
   {
     id: 'status',
     label: 'Status',
-    minWidth: 100,
+    minWidth: 70,
 
   },
 ];
@@ -191,7 +193,11 @@ export default function UserPage() {
       </HeaderStyled>
       <ContentStyled>
         <UserListStyled>
-          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <Paper sx={{
+            overflow: 'hidden', borderColor: 'text.primary',
+            m: 1,
+            border: 1,
+          }}>
             <HeaderStyled>
               <h1 style={{ textAlign: "center", color: "green" }}>
                 Users Page</h1>
@@ -252,6 +258,9 @@ export default function UserPage() {
                           role="checkbox"
                           tabIndex={-1}
                           key={user.id}>
+                          <TableCell align="left">
+                            <Avatar src={user.avt} />
+                          </TableCell>
                           <TableCell align="left">{user.name}</TableCell>
                           <TableCell align="left">{user.email}</TableCell>
                           <TableCell align="left">{user.phoneNumber}</TableCell>
