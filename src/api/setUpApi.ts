@@ -4,71 +4,8 @@ import Cookies from 'universal-cookie';
 import { User } from '../module/user.dto'
 import { CreateLocaitondto } from '../module/location.dto'
 import { RequestResetPassword, RequestLogin, ResetPassword } from '../module/auth.dto'
-import { toast } from 'react-toastify';
-import { LoadingContext } from '../context/LoadingContext'
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
-const WithAxios: React.FC<any> = ({ children }) => {
-    const { setLoading } = React.useContext(LoadingContext);
 
-    return children
-}
-axios.interceptors.request.use((config) => {
-    config.headers['Content-Type'] = 'application/json'
-    config.headers['Access-Control-Allow-Origin'] = '*'
-    const cookies = new Cookies();
-    const token = cookies.get('jwt_authentication')
-    if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-});
-axios.interceptors.response.use(
-    (res) => res,
-    (error: AxiosError) => {
-        const { status } = error.response!;
-        switch (status) {
 
-            case 401:
-                console.error('unauthorised');
-                const cookies = new Cookies();
-                cookies.remove('jwt_authentication')
-                toast.error('Please sign in first!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    theme: "colored"
-                });
-                break;
-
-            case 403:
-                toast.error('Forbidden! You do not have permission to access!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    theme: "colored"
-                });
-                break;
-            case 404:
-                console.error('/not-found');
-                toast.error('Oops! Something went error. Please contact your administrator!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    theme: "colored"
-                });
-                break;
-
-            case 500:
-                console.error('/server-error');
-                toast.error('Server is having trouble! Please try again later!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    theme: "colored"
-                });
-                break;
-            default:
-                toast.error('Unknown error. Please check and try again!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    theme: "colored"
-                });
-                break;
-        }
-        return Promise.reject(error);
-    }
-);
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -95,9 +32,16 @@ const location = {
     changedetail: (value: any) => request.put<any>('/location/system-user', value),
     create: (data: CreateLocaitondto) => request.post<any>(`/location`, data),
 };
+const analytics = {
+    user: () => request.get<number>(`/analytics/admin/number-user`),
+    family: () => request.get<number>(`/analytics/admin/number-family`),
+    location: () => request.get<number>(`/analytics/admin/number-location`)
+};
 const api = {
     auth,
     users,
-    location
+    location,
+    analytics
+
 }
 export default api;

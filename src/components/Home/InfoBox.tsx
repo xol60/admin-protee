@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import user from '../../assests/user.png'
 import location from '../../assests/location.png'
 import family from '../../assests/family.png'
+
 const commonStyles = {
 
     borderColor: 'black',
@@ -26,7 +27,9 @@ const ImageStyled = styled.div`
 `;
 
 const InfoBox = (props: any) => {
+
     const { type, number } = props
+    console.log(number);
     const [image, setImage] = React.useState(user)
     const [info, setInfo] = React.useState('')
     React.useEffect(() => {

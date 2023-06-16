@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import background from '../../assests/background3.jpg'
 import api from '../../api/setUpApi'
 import { toast } from 'react-toastify';
+import { LoadingContext } from '../../context/LoadingContext'
 const HeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
@@ -68,6 +69,7 @@ export default function UserDeatil() {
     const params = useParams();
     const selectedId = params.id + '';
     const navigate = useNavigate();
+    const { loading } = React.useContext(LoadingContext)
     const [user, setUser] = React.useState<User>({
         id: '',
         name: '',
@@ -122,9 +124,7 @@ export default function UserDeatil() {
     React.useEffect(() => {
         loadUserDetail()
     }, [])
-    if (user.id === '') {
-        return (<></>)
-    }
+    if (loading) return <></>
     return (
         <>
             <WrapperStyled>

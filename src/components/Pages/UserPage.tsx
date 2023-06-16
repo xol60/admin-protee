@@ -131,7 +131,7 @@ export default function UserPage() {
     try {
       const res = api.users.list(usersQuery);
       Promise.all([res]).then(values => {
-        console.log(333);
+
         setUsers(values[0].data);
         setTotal(values[0].total)
       });
@@ -143,9 +143,9 @@ export default function UserPage() {
   React.useEffect(() => {
     setQuery({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '' })
   }, [queryParameters]);
-  React.useEffect(() => {
+  React.useMemo(() => {
     loadUsers();
-  }, [usersQuery]);
+  }, []);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
