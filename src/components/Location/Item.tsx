@@ -10,18 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import {  Chip } from '@mui/material';
 
 const Item = (i: any) => {
-  const [user,setUser]=React.useState<User>();
+  
  
-  try {
-    const res = api.users.detail(i.i.createdBy)
-    Promise.all([res]).then(values => {
-        setUser(values[0]);
-        
-    });
-    }
-    catch (err) {
-      console.log(err);
-    }
  
   const [form1] = Form.useForm();
   const lat = Number(i.i.lat)
@@ -114,8 +104,8 @@ const Item = (i: any) => {
   }
   const navigate=useNavigate()
   const Userclick=()=>{
-    if(user){
-      navigate(`/user/${user.id}`)
+    if(i.i.user){
+      navigate(`/user/${i.i.user.id}`)
     }
   }
   
@@ -136,9 +126,9 @@ const Item = (i: any) => {
          
           
         <List.Item.Meta
-          avatar={<Avatar onClick={Userclick} src={user?.avt||"https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
+          avatar={<Avatar onClick={Userclick} src={i.i.user?.avt||"https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
           title="Creator"
-          description={<a onClick={Userclick}>{user?.name||"Admin"}</a>}
+          description={<a onClick={Userclick}>{i.i.user?.name||"Admin"}</a>}
          
         />
         <Chip label={confirmedStatus} onClick={showModal}  />
