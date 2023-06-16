@@ -9,7 +9,7 @@ import { DownOutlined } from '@ant-design/icons';
 import React, { useState, } from 'react'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { HomeOutlined, PlusOutlined, SearchOutlined, UndoOutlined } from '@ant-design/icons';
-import api from '../../api/axiosClient';
+import api from '../../api/setUpApi';
 import { DangerousLocation } from '../../module/location.dto';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -78,8 +78,8 @@ const ListItem = () => {
   React.useEffect(() => {
     setQuery({ filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '', status: queryParameters.get("status") + '' })
   }, [queryParameters]);
-  const  map  = useGoogleMap()
-  
+  const map = useGoogleMap()
+
 
 
 
@@ -107,10 +107,10 @@ const ListItem = () => {
       lat: lat
     })
     Promise.all([pro]).then(values => {
-     
+
       setLocations([...locations, values[0]])
 
-     
+
       toast.success("Add new dangerous location successfully", {
         position: toast.POSITION.TOP_CENTER,
         theme: "colored"
@@ -136,12 +136,12 @@ const ListItem = () => {
   };
   const onSortClick: MenuProps['onClick'] = ({ key }) => {
     navigate(`/locations?&filter=${query.filter + ''}&sortField=${key}&status=${query.status}`)
-    
+
   };
   const onStatusClick: MenuProps['onClick'] = ({ key }) => {
-   
+
     navigate(`/locations?&filter=${query.filter + ''}&sortField=${query.sortField}&status=${key}`)
-    
+
   };
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const handleCancel1 = () => {
@@ -166,7 +166,7 @@ const ListItem = () => {
         Promise.all([pro]).then(values => {
           if (values[0]) {
             setLocations([...locations, values[0]])
-            
+
             toast.success("Add new dangerous location successfully", {
               position: toast.POSITION.TOP_CENTER,
               theme: "colored"

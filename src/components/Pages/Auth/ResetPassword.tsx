@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import background from '../../../assests/background.jpg'
-import api from '../../../api/axiosClient'
+import api from '../../../api/setUpApi'
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 const theme = createTheme();

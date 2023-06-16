@@ -1,18 +1,18 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Avatar, Button, Form, List, Modal, Select,  } from 'antd'
+import { Avatar, Button, Form, List, Modal, Select, } from 'antd'
 import React from 'react'
-import api from '../../api/axiosClient'
+import api from '../../api/setUpApi'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { toast } from 'react-toastify';
 import { User } from '../../module/user.dto';
 
 import { useNavigate } from 'react-router-dom';
-import {  Chip } from '@mui/material';
+import { Chip } from '@mui/material';
 
 const Item = (i: any) => {
-  
- 
- 
+
+
+
   const [form1] = Form.useForm();
   const lat = Number(i.i.lat)
   const lng = Number(i.i.long)
@@ -102,41 +102,41 @@ const Item = (i: any) => {
   const Centerclick = () => {
     map?.panTo({ lat, lng })
   }
-  const navigate=useNavigate()
-  const Userclick=()=>{
-    if(i.i.user){
+  const navigate = useNavigate()
+  const Userclick = () => {
+    if (i.i.user) {
       navigate(`/user/${i.i.user.id}`)
     }
   }
-  
+
   return (
     <List.Item
       actions={[<Button onClick={showModal}><EditOutlined /></Button>]}
     >
-      
-        <List.Item.Meta
-         
-          avatar={<Avatar src={i.i.icon} />}
-          title={<a onClick={Centerclick}>{i.i.name}</a>}
-          description={i.i.description}
-        />
-      
-       
-        
-         
-          
-        <List.Item.Meta
-          avatar={<Avatar onClick={Userclick} src={i.i.user?.avt||"https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
-          title="Creator"
-          description={<a onClick={Userclick}>{i.i.user?.name||"Admin"}</a>}
-         
-        />
-        <Chip label={confirmedStatus} onClick={showModal}  />
-        
-      
-       
-        
-      
+
+      <List.Item.Meta
+
+        avatar={<Avatar src={i.i.icon} />}
+        title={<a onClick={Centerclick}>{i.i.name}</a>}
+        description={i.i.description}
+      />
+
+
+
+
+
+      <List.Item.Meta
+        avatar={<Avatar onClick={Userclick} src={i.i.user?.avt || "https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
+        title="Creator"
+        description={<a onClick={Userclick}>{i.i.user?.name || "Admin"}</a>}
+
+      />
+      <Chip label={confirmedStatus} onClick={showModal} />
+
+
+
+
+
       <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           name="basic"

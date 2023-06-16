@@ -20,7 +20,7 @@ import { User } from '../../module/user.dto'
 import { Query } from '../../module/query.dto'
 import Avatar from '@mui/material/Avatar';
 import SearchModal from '../Modal/SearchModal'
-import api from '../../api/axiosClient'
+import api from '../../api/setUpApi'
 const HeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;

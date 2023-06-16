@@ -7,7 +7,7 @@ import { Radio } from 'antd';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import background from '../../assests/background3.jpg'
-import api from '../../api/axiosClient'
+import api from '../../api/setUpApi'
 import { toast } from 'react-toastify';
 const HeaderStyled = styled.div`
   display: flex;

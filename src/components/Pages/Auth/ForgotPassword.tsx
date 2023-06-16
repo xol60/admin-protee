@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import background from '../../../assests/background.jpg'
-import api from '../../../api/axiosClient'
+import api from '../../../api/setUpApi'
 import { toast } from 'react-toastify';
 const theme = createTheme();
 export default function ForgotPassword() {

@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie'
 import background from '../../../assests/background2.jpg'
-import api from '../../../api/axiosClient'
+import api from '../../../api/setUpApi'
 import { toast } from 'react-toastify';
 const theme = createTheme();
 
@@ -31,7 +31,6 @@ export default function Login() {
     })
     console.log(res)
     Promise.all([res]).then(values => {
-      console.log(values)
       if (values[0].accessToken) {
 
         navigate('/homepage')
