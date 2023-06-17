@@ -3,32 +3,34 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 import { LoadingContext } from '../context/LoadingContext'
-
+let isResponse = false;
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 const WithAxios: React.FC<any> = ({ children }) => {
     const { setLoading } = React.useContext(LoadingContext);
-    axios.interceptors.request.use((config) => {
-        config.headers['Content-Type'] = 'application/json'
-        config.headers['Access-Control-Allow-Origin'] = '*'
-        const cookies = new Cookies();
-        const token = cookies.get('jwt_authentication')
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        setLoading(true);
-        return config;
-    });
-    React.useEffect(() => {
+    if (!isResponse) {
+        axios.interceptors.request.use((config) => {
+            isResponse = true;
+            config.headers['Content-Type'] = 'application/json'
+            config.headers['Access-Control-Allow-Origin'] = '*'
+            const cookies = new Cookies();
+            const token = cookies.get('jwt_authentication')
+            if (token) {
+                config.headers['Authorization'] = `Bearer ${token}`;
+            }
+            setLoading(true);
+            return config;
+        });
         axios.interceptors.response.use(
             (res) => {
                 setLoading(false);
+                isResponse = true;
                 return res;
             },
             (error: AxiosError) => {
                 setLoading(false);
+                isResponse = true;
                 const { status } = error.response!;
                 switch (status) {
-
                     case 401:
                         console.error('unauthorised');
                         const cookies = new Cookies();
@@ -70,7 +72,7 @@ const WithAxios: React.FC<any> = ({ children }) => {
                 return Promise.reject(error);
             }
         )
-    }, [setLoading])
+    }
     return children
 }
 export default WithAxios
