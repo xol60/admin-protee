@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import ListItem from '../../components/Location/ListItem';
 import { GoogleMapsProvider } from '@ubilabs/google-maps-react-hooks';
 import "@reach/combobox/styles.css";
+
 const mapOptions = {
-  zoom: 12,
+  zoom: 16,
   center: {
-    lat: 10.763046391328121,
-    lng: 106.68243948091191,
+    lat: Number(process.env.REACT_APP_LAT_CENTER),
+    lng: Number(process.env.REACT_APP_LNG_CENTER),
   },
 }
 function LocationPage() {

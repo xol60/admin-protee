@@ -4,10 +4,12 @@ import React from 'react'
 import api from '../../api/setUpApi'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { toast } from 'react-toastify';
-import { User } from '../../module/user.dto';
+
 
 import { useNavigate } from 'react-router-dom';
 import { Chip } from '@mui/material';
+
+import EditIcon from '@mui/icons-material/Edit';
 
 const Item = (i: any) => {
 
@@ -110,11 +112,12 @@ const Item = (i: any) => {
   }
 
   return (
-    <List.Item
-      actions={[<Button onClick={showModal}><EditOutlined /></Button>]}
+    <List.Item style={{width: '100%'}}
+      
     >
 
-      <List.Item.Meta
+      <List.Item.Meta 
+      style={{width: '100%',marginRight:'40px'}}
 
         avatar={<Avatar src={i.i.icon} />}
         title={<a onClick={Centerclick}>{i.i.name}</a>}
@@ -126,12 +129,14 @@ const Item = (i: any) => {
 
 
       <List.Item.Meta
-        avatar={<Avatar onClick={Userclick} src={i.i.user?.avt || "https://i.ibb.co/2MQCBJD/user-icon-vector-260nw-393536320.webp"} />}
+     
+      
+        avatar={<Avatar onClick={Userclick} src={i.i.user?.avt || process.env.REACT_APP_ADMIN_IMAGE } />}
         title="Creator"
-        description={<a onClick={Userclick}>{i.i.user?.name || "Admin"}</a>}
+        description={<a style={{color:'rgba(24,128,56,1.00)'}} onClick={Userclick}>{i.i.user?.name || "Admin"}</a>}
 
       />
-      <Chip label={confirmedStatus} onClick={showModal} />
+      <Chip   style={{width: '19%',marginRight:'10px'}} label={confirmedStatus} onClick={showModal}  icon={<EditIcon></EditIcon>}></Chip>
 
 
 

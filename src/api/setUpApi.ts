@@ -37,11 +37,16 @@ const analytics = {
     family: () => request.get<number>(`/analytics/admin/number-family`),
     location: () => request.get<number>(`/analytics/admin/number-location`)
 };
+const settings={
+    getRadius:()=>request.get<any>(`/settings/radius`),
+    setRadius:(value:any)=>request.put<any>(`/settings/radius`,value)
+}
 const api = {
     auth,
     users,
     location,
-    analytics
+    analytics,
+    settings
 
 }
 export default api;
