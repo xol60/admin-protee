@@ -3,9 +3,9 @@ import { Box, Flex, SkeletonCircle } from '@chakra-ui/react'
 
 import Item from './Item';
 import { useSearchParams } from "react-router-dom"
-import { Button, Form, Input, List, Modal, Tooltip, Dropdown, Space } from 'antd'
+import { Button, Form, Input, List, Modal, Tooltip, Dropdown, Space,InputNumber } from 'antd'
 import type { MenuProps } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import React, { useState, } from 'react'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
 import { HomeOutlined, PlusOutlined, SearchOutlined, UndoOutlined } from '@ant-design/icons';
@@ -20,6 +20,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { QueryLocationDto } from '../../module/location.dto'
 import SearchModal from '../Modal/SearchModal'
+import { error } from 'console';
+import { ValueType } from 'framer-motion';
 
 const sortValues: MenuProps['items'] = [
   {
@@ -109,6 +111,7 @@ const ListItem = () => {
     Promise.all([pro]).then(values => {
 
       setLocations([...locations, values[0]])
+      
 
 
       toast.success("Add new dangerous location successfully", {
@@ -117,6 +120,7 @@ const ListItem = () => {
       })
     }).catch(error => {
       if (error.response.status === 400) {
+        
         toast.error("Add new dangerous location fail.Please check your input address", {
           position: toast.POSITION.TOP_CENTER,
           theme: "colored"
@@ -166,6 +170,7 @@ const ListItem = () => {
         Promise.all([pro]).then(values => {
           if (values[0]) {
             setLocations([...locations, values[0]])
+           
 
             toast.success("Add new dangerous location successfully", {
               position: toast.POSITION.TOP_CENTER,
@@ -177,7 +182,7 @@ const ListItem = () => {
       })
       .catch(error => {
         if (error.response.status === 400) {
-          setIsModalOpen1(false)
+          
           toast.error("Add new dangerous location fail.Please check your input address", {
             position: toast.POSITION.TOP_CENTER,
             theme: "colored"
@@ -197,14 +202,79 @@ const ListItem = () => {
     setIsModalOpen1(true)
     form1.resetFields()
   }
+  const [isModalOpen2, setIsModalOpen2] = React.useState<boolean>(false);
+  const [radius,setRadius]=React.useState<Number>()
+  
+  
+  const [form2] = Form.useForm();
+  const showModal2 = () => {
+    try{
+      const res=api.settings.getRadius()
+      Promise.all([res]).then(values => {setRadius(values[0].data)
+        setIsModalOpen2(true)
+        })
+      .catch(error=>{
+        
+      })
+    }
+    catch (err) {
+      console.log(err);
+  }
+   
+  }
+  const handleCancel2 = () => {
+
+    setIsModalOpen2(false);
+    form2.resetFields();
+
+  }
+  const onFinishFailed2 = (errorInfo: any) => {
+
+  };
+  const onFinish2 = (values: any) => {
+    setIsModalOpen2(false)
+    if(values.radius===radius){
+      
+
+    }
+    else{
+    const res = api.settings.setRadius({
+      "data": values.radius,
+      
+    })
+        Promise.all([res]).then(value => {
+          if (value[0]) {
+            setRadius(values.radius)
+           
+
+            toast.success("Change radius of locations successfully", {
+              position: toast.POSITION.TOP_CENTER,
+              theme: "colored"
+            })
+
+          }
+        })
+      
+      .catch(error => {
+        if (error.response.status === 400) {
+          
+          toast.error("Change radius of locations fail", {
+            position: toast.POSITION.TOP_CENTER,
+            theme: "colored"
+          })
+        }
+      })}
+
+  };
+
 
   if (!true)
     return (
       <Flex
         direction={"column"}
         bg={"whiteAlpha.900"}
-        width={"37vw"}
-        height="100vh"
+        width={"30vw"}
+        height="150vh"
         position={"absolute"}
         left={0}
         top={0}
@@ -240,14 +310,14 @@ const ListItem = () => {
     <Flex
       direction={"column"}
       bg={"whiteAlpha.900"}
-      width={"37vw"}
+      width={"30vw"}
       height="100vh"
       position={"absolute"}
       left={0}
       top={0}
       zIndex={1}
       overflow="hidden"
-      px={2}
+      px={0}
     >
 
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
@@ -266,6 +336,7 @@ const ListItem = () => {
           </Dropdown>
           <Button style={{ margin: '10px' }} title='Add a new location' onClick={showModal1} type="primary" size="large" shape="circle" icon={<PlusOutlined />}></Button>
           <Button style={{ margin: '10px' }} title='Search name of location' onClick={() => { setIsOpen(true) }} type="primary" shape="circle" size="large" icon={<SearchOutlined />}></Button>
+          <Button style={{ margin: '10px' }} title='Set the radius of locations' onClick={showModal2} type="primary" shape="circle" size="large" icon={<SettingOutlined />}></Button> 
           <Button style={{ margin: '10px' }} title='Refresh condition' onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} shape="circle" type="primary" size="large" icon={<UndoOutlined />}></Button>
         </Tooltip>
 
@@ -276,7 +347,7 @@ const ListItem = () => {
           <Form
             form={form}
 
-            name="basic"
+            
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
@@ -323,7 +394,7 @@ const ListItem = () => {
           <Form
             form={form1}
 
-            name="basic"
+            
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
@@ -397,6 +468,47 @@ const ListItem = () => {
               </Button>
             </Form.Item>
           </Form>
+        </Modal>
+
+        <Modal title="Set radius of location" open={isModalOpen2} onCancel={handleCancel2} footer={[
+
+
+        ]}>
+          <Form
+            form={form2}
+
+            
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{
+              radius:radius
+          }}
+            onFinish={onFinish2}
+            onFinishFailed={onFinishFailed2}
+
+            autoComplete="off"
+          >
+
+            <Form.Item
+              label="Radius"
+              name="radius"
+              rules={[{ required: true, message: 'The radius of locations must not be empty!' }]}
+            >
+              <InputNumber min={500} ></InputNumber>
+            </Form.Item>
+            
+
+
+
+
+            <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+
         </Modal>
         <List
           className="demo-loadmore-list"
