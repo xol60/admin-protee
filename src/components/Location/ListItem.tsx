@@ -27,9 +27,20 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CategoryIcon from '@mui/icons-material/Category';
 import MenuIcon from '@mui/icons-material/Menu';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 
 
 import { AppBar, IconButton, Toolbar, Typography,Box, Badge, Menu, MenuItem, Avatar, Divider, ListItemIcon } from '@mui/material';
+const theme = createTheme({
+  palette: {
+    primary: {
+      // Purple and green play nicely together.
+      main: grey[500],
+    },
+    
+  },
+});
 
 const sortValues: MenuProps['items'] = [
   {
@@ -299,10 +310,13 @@ const ListItem = () => {
       overflow="hidden"
       px={0}
     >
+       
 
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
+        
       <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <ThemeProvider theme={theme}>
+      <AppBar color='primary' position="static">
         <Toolbar>
           <IconButton
             size="large"
@@ -370,6 +384,7 @@ const ListItem = () => {
           
         </Toolbar>
       </AppBar>
+      </ThemeProvider>
     </Box>
     <Menu
         anchorEl={anchorEl}

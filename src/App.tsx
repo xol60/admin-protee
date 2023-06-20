@@ -14,6 +14,8 @@ import LoadingPage from './components/Supplement/Loading'
 import AppContext from './context/AuthContext'
 import WithAxios from './api/axiosClient';
 import 'react-toastify/dist/ReactToastify.css';
+import StatisticPage from './components/Pages/StatisticPage';
+
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +27,7 @@ function App() {
                 <Route path="homepage" element={<HomePage />} />
                 <Route path="users" element={<UserPage />} />
                 <Route path='user/:id' element={<UserDetail />} />
+                <Route path='statistic' element={<StatisticPage />} />
               </Route>
               <Route path="/auth" >
                 <Route path="login" element={<Login />} />
