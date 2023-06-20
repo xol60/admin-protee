@@ -1,14 +1,14 @@
-import { Box, Flex, SkeletonCircle } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 
-
+import HomeIcon from '@mui/icons-material/Home';
 import Item from './Item';
 import { useSearchParams } from "react-router-dom"
-import { Button, Form, Input, List, Modal, Tooltip, Dropdown, Space,InputNumber } from 'antd'
+import { Button, Form, Input, List, Modal,  Dropdown,InputNumber } from 'antd'
 import type { MenuProps } from 'antd';
-import { DownOutlined, SettingOutlined } from '@ant-design/icons';
+
 import React, { useState, } from 'react'
 import { useGoogleMap } from '@ubilabs/google-maps-react-hooks';
-import { HomeOutlined, PlusOutlined, SearchOutlined, UndoOutlined } from '@ant-design/icons';
+
 import api from '../../api/setUpApi';
 import { DangerousLocation } from '../../module/location.dto';
 import PlacesAutocomplete from 'react-places-autocomplete';
@@ -20,8 +20,16 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { QueryLocationDto } from '../../module/location.dto'
 import SearchModal from '../Modal/SearchModal'
-import { error } from 'console';
-import { ValueType } from 'framer-motion';
+import AddLocationIcon from '@mui/icons-material/AddLocation';
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
+import SettingsIcon from '@mui/icons-material/Settings';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import CategoryIcon from '@mui/icons-material/Category';
+import MenuIcon from '@mui/icons-material/Menu';
+
+
+import { AppBar, IconButton, Toolbar, Typography,Box, Badge, Menu, MenuItem, Avatar, Divider, ListItemIcon } from '@mui/material';
 
 const sortValues: MenuProps['items'] = [
   {
@@ -268,42 +276,14 @@ const ListItem = () => {
   };
 
 
-  if (!true)
-    return (
-      <Flex
-        direction={"column"}
-        bg={"whiteAlpha.900"}
-        width={"30vw"}
-        height="150vh"
-        position={"absolute"}
-        left={0}
-        top={0}
-        zIndex={1}
-        overflow="hidden"
-        px={2}
-      >
-        <Box padding="6" boxShadow="lg" bg="white" mt={16}>
-          <SkeletonCircle size="10" />
-
-        </Box>
-        <Box padding="6" boxShadow="lg" bg="white" mt={3}>
-          <SkeletonCircle size="10" />
-
-        </Box>
-        <Box padding="6" boxShadow="lg" bg="white" mt={3}>
-          <SkeletonCircle size="10" />
-
-        </Box>
-        <Box padding="6" boxShadow="lg" bg="white" mt={3}>
-          <SkeletonCircle size="10" />
-
-        </Box>
-        <Box padding="6" boxShadow="lg" bg="white" mt={3}>
-          <SkeletonCircle size="10" />
-
-        </Box>
-      </Flex>
-    );
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
 
@@ -321,24 +301,146 @@ const ListItem = () => {
     >
 
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
-
-        <Tooltip  >
-          <Button style={{ margin: '10px' }} title='Come back Home Page' onClick={() => { navigate('/homepage') }} type="primary" shape="circle" size="large" icon={<HomeOutlined />}></Button>
+      <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            title='Back to homepage'
+            sx={{ mr: 2 }}
+          >
+            <HomeIcon onClick={() => { navigate('/homepage') }} />
+          </IconButton>
+          <IconButton sx={{ mr: 2 }} edge="start" title='Refresh condition' size="large"  color="inherit">
+              
+              <RefreshIcon onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} />
+              
+            </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Dropdown menu={{ items: sortValues, onClick: onSortClick }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Button style={{ margin: '10px' }} type="primary" size="large" icon={<DownOutlined />}>Sort By</Button>
-            </a>
+            
+            <IconButton onClick={(e) => e.preventDefault()}
+            size="large"
+            edge="start"
+            color="inherit"
+            title='Sort by'
+            sx={{ mr: 2 }}
+          >
+            <FilterListIcon  />
+          </IconButton>
+           
           </Dropdown>
           <Dropdown menu={{ items: statusValues, onClick: onStatusClick }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Button style={{ margin: '10px' }} type="primary" size="large" icon={<DownOutlined />}>Status</Button>
-            </a>
+            
+            <IconButton  onClick={(e) => e.preventDefault()}
+            size="large"
+            edge="start"
+            color="inherit"
+            title='Status of location'
+            sx={{ mr: 2 }}
+          >
+            <CategoryIcon   />
+          </IconButton>
+            
           </Dropdown>
-          <Button style={{ margin: '10px' }} title='Add a new location' onClick={showModal1} type="primary" size="large" shape="circle" icon={<PlusOutlined />}></Button>
-          <Button style={{ margin: '10px' }} title='Search name of location' onClick={() => { setIsOpen(true) }} type="primary" shape="circle" size="large" icon={<SearchOutlined />}></Button>
-          <Button style={{ margin: '10px' }} title='Set the radius of locations' onClick={showModal2} type="primary" shape="circle" size="large" icon={<SettingOutlined />}></Button> 
-          <Button style={{ margin: '10px' }} title='Refresh condition' onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} shape="circle" type="primary" size="large" icon={<UndoOutlined />}></Button>
-        </Tooltip>
+            <IconButton  onClick={handleClick}
+            size="small"
+            sx={{ ml: 2 }}
+            color='inherit'
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}>
+              <Badge  color="error">
+                <MenuIcon  />
+              </Badge>
+            </IconButton>
+           
+            
+           
+            
+            
+            
+            
+          </Box>
+          
+          
+          
+        </Toolbar>
+      </AppBar>
+    </Box>
+    <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem onClick={showModal2}>
+          <IconButton title='Set radius of location' size="large"  color="inherit">
+              <Badge  color="error">
+                <SettingsIcon  />
+              </Badge>
+            </IconButton>Set radius
+        </MenuItem>
+        <MenuItem onClick={() => { setIsOpen(true) }}>
+          <IconButton title='Search a location' size="large"  color="inherit">
+              <Badge  color="error">
+              <LocationSearchingIcon />
+              </Badge>
+            </IconButton>Search
+        </MenuItem>
+        <MenuItem onClick={showModal1}>
+        <IconButton
+              size="large"
+             title="Add a location"
+              color="inherit"
+            >
+              <Badge  color="error">
+                <AddLocationIcon  />
+              </Badge>
+            </IconButton>Create
+        </MenuItem>
+        
+        
+      </Menu>
+
+        
+          
+          
+       
+         
+        
 
         <Modal title="Add Location" open={isModalOpen} onCancel={handleCancel} footer={[
 
