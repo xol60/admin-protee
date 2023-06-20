@@ -3,3 +3,8 @@ export interface AnalyticsDto {
     family: number,
     location: number
 }
+export interface SlideDataDto {
+    type: string,
+    image: any,
+    title: string
+}

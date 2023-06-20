@@ -2,52 +2,30 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Box } from '@mui/system';
 import Typography from '@mui/material/Typography';
-import user from '../../assests/user.png'
-import location from '../../assests/location.png'
-import family from '../../assests/family.png'
-
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const commonStyles = {
-
     borderColor: 'black',
     m: 1,
     border: 1,
-    width: 300,
-    height: 300,
+    width: '80%',
+    height: '100%',
+    margin: '5%',
+    bgcolor: '#c1daf1'
 };
 
-const ImageStyled = styled.div`
-.imageInfo{
-     margin-left:100px;
-  margin-top:50px;
-  }
-  .info{
-     margin-left:90px;
-  margin-top:50px;
-  }
+const InfoStyled = styled.div`
+    margin-top:500px;
+    color:white;
+    text-aligin:center
 `;
 
 const InfoBox = (props: any) => {
 
-    const { type, number } = props
-    console.log(number);
-    const [image, setImage] = React.useState(user)
-    const [info, setInfo] = React.useState('')
-    React.useEffect(() => {
-        switch (type) {
-            case "user":
-                setImage(user);
-                setInfo("Users   :   " + number);
-                break
-            case "family":
-                setImage(family);
-                setInfo("Family  :   " + number);
-                break
-            case "location":
-                setImage(location);
-                setInfo("Location  :   " + number);
-                break
-        }
-    }, [])
+    const { data, number, onClickNext, onClickPrev } = props
+    console.log(number)
     return (
         <div>
             <Box
@@ -56,21 +34,33 @@ const InfoBox = (props: any) => {
                 }}
 
             >
-                <ImageStyled>
+                <Stack direction="row" spacing={2}>
                     <Box
                         className="imageInfo"
                         component="img"
                         sx={{
-                            height: 100,
-                            width: 100,
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: 300,
+                            maxHeight: 300,
+                            margin: 5,
                             borderColor: 'primary.main'
                         }}
-                        src={image}
+                        src={data.image}
                     />
-                    <Typography variant="h5" className="info" gutterBottom>
-                        {info}
-                    </Typography>
-                </ImageStyled>
+                    <Box >
+                        <Typography sx={{ mt: 15, ml: 5 }} variant="h4" gutterBottom>
+                            {data.title}
+                        </Typography>
+                        <Typography variant="h3" align="center" gutterBottom>
+                            {number}
+                        </Typography>
+                        <Stack spacing={2} sx={{ mt: '30%', ml: '80%' }} direction="row">
+                            <Button onClick={onClickPrev}><ArrowBackIosIcon /></Button>
+                            <Button onClick={onClickNext}><ArrowForwardIosIcon /></Button>
+                        </Stack>
+                    </Box>
+                </Stack>
             </Box>
         </div>
     );

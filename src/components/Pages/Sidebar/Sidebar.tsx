@@ -8,7 +8,7 @@ import { Outlet } from 'react-router-dom'
 const SidebarMenu = styled.div`
      width: 305.83px;
     height: 100vh;
-    background-color: #FFFFFF;
+    background-color: #c1daf1;
     position: fixed;
     top: 0;
    

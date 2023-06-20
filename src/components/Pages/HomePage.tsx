@@ -10,14 +10,17 @@ const WrapperStyled = styled.div`
   background-color:white;
   margin-left:305.83px;
   .image{
-    margin-left: 370px;
-    margin-top:100px;
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
   }
 `;
 const ListStyled = styled.div`
   background-color:white;
-  margin-left:70px;
-  margin-top:100px;
+  margin-left:8%;
+  margin-top:10%;
+  aligin:center;
 `;
 
 export default function HomePage() {
