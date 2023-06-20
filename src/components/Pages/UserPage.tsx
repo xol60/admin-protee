@@ -143,9 +143,9 @@ export default function UserPage() {
   React.useEffect(() => {
     setQuery({ page: queryParameters.get("page") + '', take: queryParameters.get("take") + '', filter: queryParameters.get("filter") + '', sortField: queryParameters.get("sortField") + '' })
   }, [queryParameters]);
-  React.useMemo(() => {
+  React.useEffect(() => {
     loadUsers();
-  }, []);
+  }, [queryParameters]);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,

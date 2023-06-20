@@ -13,7 +13,8 @@ const commonStyles = {
     width: '80%',
     height: '100%',
     margin: '5%',
-    bgcolor: '#c1daf1'
+    bgcolor: '#9e9e9e',
+    color: 'white'
 };
 
 const InfoStyled = styled.div`
@@ -56,8 +57,8 @@ const InfoBox = (props: any) => {
                             {number}
                         </Typography>
                         <Stack spacing={2} sx={{ mt: '30%', ml: '80%' }} direction="row">
-                            <Button onClick={onClickPrev}><ArrowBackIosIcon /></Button>
-                            <Button onClick={onClickNext}><ArrowForwardIosIcon /></Button>
+                            <Button onClick={onClickPrev}><ArrowBackIosIcon sx={{ color: 'white' }} /></Button>
+                            <Button onClick={onClickNext}><ArrowForwardIosIcon sx={{ color: 'white' }} /></Button>
                         </Stack>
                     </Box>
                 </Stack>

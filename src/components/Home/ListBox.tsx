@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import InfoBox from './InfoBox'
 import api from '../../api/setUpApi'
-import { AnalyticsDto, SlideDataDto } from '../../module/analytics.dto'
-import styled from 'styled-components'
+import { SlideDataDto } from '../../module/analytics.dto'
 import { InfoData } from './InfoData'
 export default function ListBox() {
-    const [loading, setLoading] = useState(true)
     const [activeSlideNo, setActiveSlideNo] = useState(0);
     const [currentData, setCurrentData] = useState<SlideDataDto>({ title: InfoData[0].title + '', image: InfoData[0].image, type: InfoData[0].type + '' })
     const [number, setNumber] = useState(0)
@@ -27,25 +25,6 @@ export default function ListBox() {
             setNumber(Number(values[0]))
         })
     }, [currentData])
-    // const [analytic, setAnalytic] = React.useState<AnalyticsDto>({
-    //     user: 0,
-    //     family: 0,
-    //     location: 0
-    // });
-    // React.useEffect(() => {
-    //     const resUser = api.analytics.user()
-    //     const resFamily = api.analytics.family()
-    //     const resLocation = api.analytics.location()
-    //     Promise.all([resUser, resFamily, resLocation]).then(values => {
-    //         setAnalytic({
-    //             user: values[0],
-    //             family: values[1],
-    //             location: values[2]
-    //         })
-    //         setLoading(false)
-    //     })
-    // }, [])
-    // if (loading) return <></>
 
     const onClickNext = () => {
         var curSlideNo = activeSlideNo;

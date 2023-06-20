@@ -188,7 +188,7 @@ export default function UserDeatil() {
                                 label="Date of birth"
                                 name="dob"
                             >
-                                <DatePicker format={dateFormat} />
+                                {user.dob ? <DatePicker format={dateFormat} /> : <Input disabled />}
                             </Form.Item>
                             <Form.Item
                                 label="Status" name="isActive"

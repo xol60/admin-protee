@@ -8,10 +8,10 @@ import { Outlet } from 'react-router-dom'
 const SidebarMenu = styled.div`
      width: 305.83px;
     height: 100vh;
-    background-color: #c1daf1;
+    background-color: #9e9e9e;
     position: fixed;
     top: 0;
-   
+
     transition: .6s;
 `
 
@@ -32,7 +32,7 @@ const MenuItemLinks = styled(Link)`
     padding: 0 2rem;
     font-size: 20px;
     text-decoration: none;
-    color: #332D2D;
+    color: white;
 
 `
 
