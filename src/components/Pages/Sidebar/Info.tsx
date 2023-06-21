@@ -79,8 +79,8 @@ export default function Info() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
+                <MenuItem onClick={onClick}>
+                    <ListItemIcon >
                         <LogoutIcon fontSize="small" />
                     </ListItemIcon>
                     Logout

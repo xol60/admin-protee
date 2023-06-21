@@ -24,16 +24,17 @@ const MenuItems = styled.li`
     height: 90px;
     padding: 1rem 0 1.25rem;
     color:white;
+    margin-left:50;
 `
 
 const MenuItemLinks = styled(Link)`
     display: flex;
     align-items: center;
     padding: 0 2rem;
-    font-size: 20px;
+    font-size: 25px;
     text-decoration: none;
     color: white;
-
+     margin-left:20px;
 `
 
 const Sidebar: React.FunctionComponent = () => {

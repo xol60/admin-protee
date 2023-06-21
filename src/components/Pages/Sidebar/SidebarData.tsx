@@ -2,6 +2,7 @@
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 export const SidebarData = [
     {
         title: 'Home',
@@ -17,5 +18,10 @@ export const SidebarData = [
         title: 'Locations',
         path: '/locations?filter=&sortField=&status=',
         icon: <LocationOnIcon />
+    },
+    {
+        title: 'Statistics',
+        path: '/statistic',
+        icon: <StackedLineChartIcon />
     },
 ]
