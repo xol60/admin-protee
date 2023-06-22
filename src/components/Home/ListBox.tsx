@@ -35,7 +35,6 @@ export default function ListBox() {
         else {
             setActiveSlideNo(0);
         }
-        console.log(activeSlideNo)
         setCurrentData({ title: InfoData[activeSlideNo].title + '', image: InfoData[activeSlideNo].image, type: InfoData[activeSlideNo].type + '' });
     };
 

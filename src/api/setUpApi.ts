@@ -35,11 +35,12 @@ const location = {
 const analytics = {
     user: () => request.get<number>(`/analytics/admin/number-user`),
     family: () => request.get<number>(`/analytics/admin/number-family`),
-    location: () => request.get<number>(`/analytics/admin/number-location`)
+    location: () => request.get<number>(`/analytics/admin/number-location`),
+    statistic: () => request.get<any>(`/analytics/admin/statistic-user`)
 };
-const settings={
-    getRadius:()=>request.get<any>(`/settings/radius`),
-    setRadius:(value:any)=>request.put<any>(`/settings/radius`,value)
+const settings = {
+    getRadius: () => request.get<any>(`/settings/radius`),
+    setRadius: (value: any) => request.put<any>(`/settings/radius`, value)
 }
 const api = {
     auth,

@@ -2,7 +2,6 @@
   "name": "portal",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://protee-be.herokuapp.com/api/v1/",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@chakra-ui/react": "^2.6.1",

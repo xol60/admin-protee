@@ -9,7 +9,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 export default function LoadingPage() {
     const { loading } = React.useContext(LoadingContext)
-    console.log(loading);
+
     return (
         <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

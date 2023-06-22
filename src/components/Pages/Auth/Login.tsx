@@ -29,7 +29,6 @@ export default function Login() {
       email: data.get('email') + '',
       password: data.get('password') + ''
     })
-    console.log(res)
     Promise.all([res]).then(values => {
       if (values[0].accessToken) {
 

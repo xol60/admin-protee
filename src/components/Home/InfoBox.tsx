@@ -26,7 +26,6 @@ const InfoStyled = styled.div`
 const InfoBox = (props: any) => {
 
     const { data, number, onClickNext, onClickPrev } = props
-    console.log(number)
     return (
         <div>
             <Box

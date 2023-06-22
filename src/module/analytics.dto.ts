@@ -4,3 +4,8 @@ export interface SlideDataDto {
     image: any,
     title: string
 }
+
+export interface StatisticDto {
+    time: string;
+    quantity: number;
+}
