@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Stack from '@mui/material/Stack';
 import InfoBox from './InfoBox'
 import api from '../../api/setUpApi'
 import { SlideDataDto } from '../../module/analytics.dto'
@@ -8,10 +7,9 @@ export default function ListBox() {
     const [activeSlideNo, setActiveSlideNo] = useState(0);
     const [currentData, setCurrentData] = useState<SlideDataDto>({ title: InfoData[0].title + '', image: InfoData[0].image, type: InfoData[0].type + '' })
     const [number, setNumber] = useState(0)
+    const [type, setType] = useState('user')
     useEffect(() => {
         let resData;
-        const type = currentData.type
-        console.log(type)
         if (type === "family") {
             resData = api.analytics.family()
         }
@@ -24,7 +22,7 @@ export default function ListBox() {
         Promise.all([resData]).then(values => {
             setNumber(Number(values[0]))
         })
-    }, [currentData])
+    }, [type])
 
     const onClickNext = () => {
         var curSlideNo = activeSlideNo;
@@ -36,6 +34,7 @@ export default function ListBox() {
             setActiveSlideNo(0);
         }
         setCurrentData({ title: InfoData[activeSlideNo].title + '', image: InfoData[activeSlideNo].image, type: InfoData[activeSlideNo].type + '' });
+        setType(InfoData[activeSlideNo].type + '')
     };
 
     const onClickPrev = () => {
@@ -49,6 +48,7 @@ export default function ListBox() {
             setActiveSlideNo(InfoData.length - 1);
         }
         setCurrentData({ title: InfoData[activeSlideNo].title + '', image: InfoData[activeSlideNo].image, type: InfoData[activeSlideNo].type + '' });
+        setType(InfoData[activeSlideNo].type + '')
     };
     return (
         <div>

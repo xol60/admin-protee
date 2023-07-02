@@ -67,7 +67,7 @@ borderColor: 'text.primary',
 const dateFormat = 'YYYY/MM/DD'
 export default function UserDeatil() {
     const params = useParams();
-    const selectedId = params.id + '';
+    const [selectedId, setSelectedId] = React.useState<string>(params.id + '');
     const navigate = useNavigate();
     const { loading } = React.useContext(LoadingContext)
     const [user, setUser] = React.useState<User>({
@@ -122,9 +122,10 @@ export default function UserDeatil() {
 
     };
     React.useEffect(() => {
+        setSelectedId(params.id + '')
         loadUserDetail()
     }, [])
-    if (loading) return <></>
+    if (user.id === '') return <></>
     return (
         <>
             <WrapperStyled>

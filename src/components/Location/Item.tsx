@@ -112,12 +112,12 @@ const Item = (i: any) => {
   }
 
   return (
-    <List.Item style={{width: '100%'}}
-      
+    <List.Item style={{ width: '100%' }}
+
     >
 
-      <List.Item.Meta 
-      style={{width: '100%',marginRight:'40px'}}
+      <List.Item.Meta
+        style={{ width: '100%', marginRight: '40px' }}
 
         avatar={<Avatar src={i.i.icon} />}
         title={<a onClick={Centerclick}>{i.i.name}</a>}
@@ -129,18 +129,13 @@ const Item = (i: any) => {
 
 
       <List.Item.Meta
-     
-      
-        avatar={<Avatar onClick={Userclick} src={i.i.user?.avt || process.env.REACT_APP_ADMIN_IMAGE } />}
+
+        avatar={<Avatar onClick={Userclick} src={i.i.user?.avt || process.env.REACT_APP_ADMIN_IMAGE} />}
         title="Creator"
-        description={<a style={{color:'rgba(24,128,56,1.00)'}} onClick={Userclick}>{i.i.user?.name || "Admin"}</a>}
+        description={<a style={{ color: 'rgba(24,128,56,1.00)' }} onClick={Userclick}>{i.i.user?.name || "Admin"}</a>}
 
       />
-      <Chip   style={{width: '19%',marginRight:'10px'}} label={confirmedStatus} onClick={showModal}  icon={<EditIcon></EditIcon>}></Chip>
-
-
-
-
+      <Chip style={{ width: '19%', marginRight: '10px' }} label={confirmedStatus} onClick={showModal} icon={<EditIcon></EditIcon>}></Chip>
 
       <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form

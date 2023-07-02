@@ -145,7 +145,7 @@ export default function UserPage() {
   }, [queryParameters]);
   React.useEffect(() => {
     loadUsers();
-  }, [queryParameters]);
+  }, [query]);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,

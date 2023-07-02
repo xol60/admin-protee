@@ -4,17 +4,17 @@ import location from '../../assests/location.png'
 import family from '../../assests/family.png'
 export const InfoData = [
     {
-        title: 'Number of registered:',
+        title: 'Number of registered users',
         type: 'user',
         image: user
     },
     {
-        title: 'Number of families  :',
+        title: 'Number of created families',
         type: 'family',
         image: family
     },
     {
-        title: 'Number of locations  :',
+        title: 'Number of created locations',
         type: 'location',
         image: location
     },
