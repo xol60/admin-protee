@@ -191,7 +191,9 @@ const ListItem = () => {
           if (values[0]) {
             setLocations([...locations, values[0]])
 
-            map?.panTo({ values[0].lat , values[0].long })
+          const lat = Number(values[0].lat)
+          const lng = Number(values[0].long)
+           map?.panTo({ lat , lng })
             map?.setZoom(20)
             toast.success("Add new dangerous location successfully", {
               position: toast.POSITION.TOP_CENTER,
