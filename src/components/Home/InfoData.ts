@@ -14,7 +14,7 @@ export const InfoData = [
         image: family
     },
     {
-        title: 'Number of created locations',
+        title: 'Number of publish locations',
         type: 'location',
         image: location
     },

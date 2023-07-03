@@ -103,7 +103,13 @@ const Item = (i: any) => {
   }
   const Centerclick = () => {
     map?.panTo({ lat, lng })
+    map?.setZoom(20);
   }
+  marker.addListener("click", () => {
+    map?.panTo({ lat, lng })
+    map?.setZoom(20);
+  });
+
   const navigate = useNavigate()
   const Userclick = () => {
     if (i.i.user) {

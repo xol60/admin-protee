@@ -6,10 +6,13 @@ import dayjs from 'dayjs';
 const getListQuantityTime = (list: any[]) => {
   const fromDate = new Date(list[0].time)
   const toDate = new Date(list.slice(-1)[0].time)
+  const now = new Date()
+  const nowFormat = dayjs(now).format('YYYY-MM')
   let timeList = []
   for (let i = fromDate; i <= toDate; i.setMonth(i.getMonth() + 1)) {
     timeList.push(dayjs(i).format('YYYY-MM'))
   }
+
   let curListIndex = 0;
   let quantityList = []
   for (let i = 0; i < timeList.length; i++) {
@@ -19,23 +22,12 @@ const getListQuantityTime = (list: any[]) => {
     }
     else quantityList.push(0)
   }
+  if (nowFormat != timeList.slice(-1)[0]) {
+    timeList.push(nowFormat)
+    quantityList.push(0)
+  }
   return { quantityList, timeList }
 }
-const list = [
-  {
-    time: '2021-06',
-    quantity: "6"
-  },
-  {
-    time: '2022-06',
-    quantity: "4"
-  },
-  {
-    time: '2023-06',
-    quantity: "5"
-  }
-
-]
 export default function StatisticPage() {
   const [timeList, setTimeList] = React.useState<string[]>([])
   const [quantityList, setQuantityList] = React.useState<number[]>([])
@@ -71,7 +63,7 @@ export default function StatisticPage() {
           labels: timeList,
           datasets: [
             {
-              label: "User registered",
+              label: "New users",
               backgroundColor: "rgba(102, 237, 140, 0.8)",
               borderColor: "rgba(151, 187, 205, 1)",
               pointBackgroundColor: "rgba(151, 187, 205, 1)",

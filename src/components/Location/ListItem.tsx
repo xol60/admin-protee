@@ -3,7 +3,7 @@ import { Flex } from '@chakra-ui/react'
 import HomeIcon from '@mui/icons-material/Home';
 import Item from './Item';
 import { useSearchParams } from "react-router-dom"
-import { Button, Form, Input, List, Modal,  Dropdown,InputNumber } from 'antd'
+import { Button, Form, Input, List, Modal, Dropdown, InputNumber } from 'antd'
 import type { MenuProps } from 'antd';
 
 import React, { useState, } from 'react'
@@ -31,14 +31,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 
 
-import { AppBar, IconButton, Toolbar, Typography,Box, Badge, Menu, MenuItem, Avatar, Divider, ListItemIcon } from '@mui/material';
+import { AppBar, IconButton, Toolbar, Typography, Box, Badge, Menu, MenuItem, Avatar, Divider, ListItemIcon } from '@mui/material';
 const theme = createTheme({
   palette: {
     primary: {
       // Purple and green play nicely together.
       main: grey[500],
     },
-    
+
   },
 });
 
@@ -130,7 +130,7 @@ const ListItem = () => {
     Promise.all([pro]).then(values => {
 
       setLocations([...locations, values[0]])
-      
+
 
 
       toast.success("Add new dangerous location successfully", {
@@ -139,7 +139,7 @@ const ListItem = () => {
       })
     }).catch(error => {
       if (error.response.status === 400) {
-        
+
         toast.error("Add new dangerous location fail.Please check your input address", {
           position: toast.POSITION.TOP_CENTER,
           theme: "colored"
@@ -189,7 +189,7 @@ const ListItem = () => {
         Promise.all([pro]).then(values => {
           if (values[0]) {
             setLocations([...locations, values[0]])
-           
+
 
             toast.success("Add new dangerous location successfully", {
               position: toast.POSITION.TOP_CENTER,
@@ -201,7 +201,7 @@ const ListItem = () => {
       })
       .catch(error => {
         if (error.response.status === 400) {
-          
+
           toast.error("Add new dangerous location fail.Please check your input address", {
             position: toast.POSITION.TOP_CENTER,
             theme: "colored"
@@ -222,24 +222,25 @@ const ListItem = () => {
     form1.resetFields()
   }
   const [isModalOpen2, setIsModalOpen2] = React.useState<boolean>(false);
-  const [radius,setRadius]=React.useState<Number>()
-  
-  
+  const [radius, setRadius] = React.useState<Number>()
+
+
   const [form2] = Form.useForm();
   const showModal2 = () => {
-    try{
-      const res=api.settings.getRadius()
-      Promise.all([res]).then(values => {setRadius(values[0].data)
+    try {
+      const res = api.settings.getRadius()
+      Promise.all([res]).then(values => {
+        setRadius(values[0].data)
         setIsModalOpen2(true)
-        })
-      .catch(error=>{
-        
       })
+        .catch(error => {
+
+        })
     }
     catch (err) {
       console.log(err);
-  }
-   
+    }
+
   }
   const handleCancel2 = () => {
 
@@ -252,37 +253,36 @@ const ListItem = () => {
   };
   const onFinish2 = (values: any) => {
     setIsModalOpen2(false)
-    if(values.radius===radius){
-      
+    if (values.radius === radius) {
+
 
     }
-    else{
-    const res = api.settings.setRadius({
-      "data": values.radius,
-      
-    })
-        Promise.all([res]).then(value => {
-          if (value[0]) {
-            setRadius(values.radius)
-           
+    else {
+      const res = api.settings.setRadius({
+        "data": values.radius,
 
-            toast.success("Change radius of locations successfully", {
-              position: toast.POSITION.TOP_CENTER,
-              theme: "colored"
-            })
-
-          }
-        })
-      
-      .catch(error => {
-        if (error.response.status === 400) {
-          
-          toast.error("Change radius of locations fail", {
+      })
+      Promise.all([res]).then(value => {
+        if (value[0]) {
+          setRadius(values.radius)
+          toast.success("Change radius of locations successfully", {
             position: toast.POSITION.TOP_CENTER,
             theme: "colored"
           })
+
         }
-      })}
+      })
+
+        .catch(error => {
+          if (error.response.status === 400) {
+
+            toast.error("Change radius of locations fail", {
+              position: toast.POSITION.TOP_CENTER,
+              theme: "colored"
+            })
+          }
+        })
+    }
 
   };
 
@@ -301,7 +301,7 @@ const ListItem = () => {
     <Flex
       direction={"column"}
       bg={"whiteAlpha.900"}
-      width={"30vw"}
+      width={"40vw"}
       height="100vh"
       position={"absolute"}
       left={0}
@@ -310,152 +310,152 @@ const ListItem = () => {
       overflow="hidden"
       px={0}
     >
-       
+
 
       <Flex bg={'white'} overflowY={"scroll"} mt={60} direction={"column"}>
-        
-      <Box sx={{ flexGrow: 1 }}>
-      <ThemeProvider theme={theme}>
-      <AppBar color='primary' position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            title='Back to homepage'
-            sx={{ mr: 2 }}
-          >
-            <HomeIcon onClick={() => { navigate('/homepage') }} />
-          </IconButton>
-          <IconButton sx={{ mr: 2 }} edge="start" title='Refresh condition' size="large"  color="inherit">
-              
-              <RefreshIcon onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} />
-              
-            </IconButton>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Dropdown menu={{ items: sortValues, onClick: onSortClick }}>
-            
-            <IconButton onClick={(e) => e.preventDefault()}
-            size="large"
-            edge="start"
-            color="inherit"
-            title='Sort by'
-            sx={{ mr: 2 }}
-          >
-            <FilterListIcon  />
-          </IconButton>
-           
-          </Dropdown>
-          <Dropdown menu={{ items: statusValues, onClick: onStatusClick }}>
-            
-            <IconButton  onClick={(e) => e.preventDefault()}
-            size="large"
-            edge="start"
-            color="inherit"
-            title='Status of location'
-            sx={{ mr: 2 }}
-          >
-            <CategoryIcon   />
-          </IconButton>
-            
-          </Dropdown>
-            <IconButton  onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            color='inherit'
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}>
-              <Badge  color="error">
-                <MenuIcon  />
-              </Badge>
-            </IconButton>
-           
-            
-           
-            
-            
-            
-            
-          </Box>
-          
-          
-          
-        </Toolbar>
-      </AppBar>
-      </ThemeProvider>
-    </Box>
-    <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
+
+        <Box sx={{ flexGrow: 1 }}>
+          <ThemeProvider theme={theme}>
+            <AppBar color='primary' position="static">
+              <Toolbar>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  title='Back to homepage'
+                  sx={{ mr: 2 }}
+                >
+                  <HomeIcon onClick={() => { navigate('/homepage') }} />
+                </IconButton>
+                <IconButton sx={{ mr: 2 }} edge="start" title='Refresh condition' size="large" color="inherit">
+
+                  <RefreshIcon onClick={() => { navigate(`/locations?&filter=&sortField=&status=`) }} />
+
+                </IconButton>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  <Dropdown menu={{ items: sortValues, onClick: onSortClick }}>
+
+                    <IconButton onClick={(e) => e.preventDefault()}
+                      size="large"
+                      edge="start"
+                      color="inherit"
+                      title='Sort by'
+                      sx={{ mr: 2 }}
+                    >
+                      <FilterListIcon />
+                    </IconButton>
+
+                  </Dropdown>
+                  <Dropdown menu={{ items: statusValues, onClick: onStatusClick }}>
+
+                    <IconButton onClick={(e) => e.preventDefault()}
+                      size="large"
+                      edge="start"
+                      color="inherit"
+                      title='Status of location'
+                      sx={{ mr: 2 }}
+                    >
+                      <CategoryIcon />
+                    </IconButton>
+
+                  </Dropdown>
+                  <IconButton onClick={handleClick}
+                    size="small"
+                    sx={{ ml: 2 }}
+                    color='inherit'
+                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}>
+                    <Badge color="error">
+                      <MenuIcon />
+                    </Badge>
+                  </IconButton>
+
+
+
+
+
+
+
+                </Box>
+
+
+
+              </Toolbar>
+            </AppBar>
+          </ThemeProvider>
+        </Box>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
             },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        <MenuItem onClick={showModal2}>
-          <IconButton title='Set radius of location' size="large"  color="inherit">
-              <Badge  color="error">
-                <SettingsIcon  />
+          }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <MenuItem onClick={showModal2}>
+            <IconButton title='Set radius of location' size="large" color="inherit">
+              <Badge color="error">
+                <SettingsIcon />
               </Badge>
             </IconButton>Set radius
-        </MenuItem>
-        <MenuItem onClick={() => { setIsOpen(true) }}>
-          <IconButton title='Search a location' size="large"  color="inherit">
-              <Badge  color="error">
-              <LocationSearchingIcon />
+          </MenuItem>
+          <MenuItem onClick={() => { setIsOpen(true) }}>
+            <IconButton title='Search a location' size="large" color="inherit">
+              <Badge color="error">
+                <LocationSearchingIcon />
               </Badge>
             </IconButton>Search
-        </MenuItem>
-        <MenuItem onClick={showModal1}>
-        <IconButton
+          </MenuItem>
+          <MenuItem onClick={showModal1}>
+            <IconButton
               size="large"
-             title="Add a location"
+              title="Add a location"
               color="inherit"
             >
-              <Badge  color="error">
-                <AddLocationIcon  />
+              <Badge color="error">
+                <AddLocationIcon />
               </Badge>
             </IconButton>Create
-        </MenuItem>
-        
-        
-      </Menu>
+          </MenuItem>
 
-        
-          
-          
-       
-         
-        
+
+        </Menu>
+
+
+
+
+
+
+
 
         <Modal title="Add Location" open={isModalOpen} onCancel={handleCancel} footer={[
 
@@ -464,7 +464,7 @@ const ListItem = () => {
           <Form
             form={form}
 
-            
+
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
@@ -511,7 +511,7 @@ const ListItem = () => {
           <Form
             form={form1}
 
-            
+
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
@@ -594,13 +594,13 @@ const ListItem = () => {
           <Form
             form={form2}
 
-            
+
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
             initialValues={{
-              radius:radius
-          }}
+              radius: radius
+            }}
             onFinish={onFinish2}
             onFinishFailed={onFinishFailed2}
 
@@ -614,7 +614,7 @@ const ListItem = () => {
             >
               <InputNumber min={500} ></InputNumber>
             </Form.Item>
-            
+
 
 
 
