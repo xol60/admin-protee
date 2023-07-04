@@ -39,7 +39,7 @@ const HeaderStyled = styled.div`
 const WrapperStyled = styled.div`
   height: 100vh;
   background-color:white;
-  margin-left:305.83px;
+  margin-left:20vw;
 `;
 
 const ContentStyled = styled.div`
@@ -96,6 +96,8 @@ export default function UserDeatil() {
 
         try {
             const { name, dob, isActive } = values;
+            console.log(typeof dob)
+            console.log(dob instanceof Date ? dob : new Date('1/1/1990'))
             const res = api.users.changedetail({
                 "id": selectedId,
                 "name": name,
