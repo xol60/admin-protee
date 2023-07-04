@@ -6,7 +6,7 @@ import { SidebarData } from './SidebarData';
 import { Outlet } from 'react-router-dom'
 
 const SidebarMenu = styled.div`
-     width: 305.83px;
+     width: 20vw;
     height: 100vh;
     background-color: #9e9e9e;
     position: fixed;

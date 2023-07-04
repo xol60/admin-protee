@@ -28,7 +28,7 @@ const InfoBox = (props: any) => {
         >
             <CardMedia
                 component="img"
-                sx={{ width: 300, height: 300 }}
+                sx={{ width: '20vw', height: '20vw' }}
                 image={data.image}
                 alt="Live from space album cover"
             />
